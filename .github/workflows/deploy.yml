@@ -101,7 +101,7 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             cd /home/ubuntu/srv/ubuntu
-            sh ./config/scripts/deploy.sh
+            sh ./config/scripts/docker-install.sh
             sudo docker stop $(sudo docker ps -a -q)
             sudo docker rm $(sudo docker ps -a -q)
             sudo docker rmi $(sudo docker images -q)

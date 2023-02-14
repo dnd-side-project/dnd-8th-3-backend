@@ -43,7 +43,7 @@ jobs:
           touch ./application-prod.properties
           echo "$PROPERTIES_PROD" > ./application-prod.properties
         env:
-          PROPERTIES_PROD: ${{ secrets.PROPERTIES_PROD }}
+          PROPERTIES_PROD: ${{ secrets.PROPERTIES_PROD_8TH_3 }}
 
       # Gradle Build
       - name: Build with Gradle
@@ -63,8 +63,8 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ secrets.DOCKER_USERNAME_8TH_3 }}
+          password: ${{ secrets.DOCKER_PASSWORD_8TH_3 }}
 
       - name: Docker build & push
         uses: docker/build-push-action@v2
@@ -79,9 +79,9 @@ jobs:
       - name: create remote directory
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}
+          host: ${{ secrets.HOST_8TH_3 }}
           username: ubuntu
-          key: ${{ secrets.KEY }}
+          key: ${{ secrets.KEY_8TH_3 }}
           script: mkdir -p /home/ubuntu/srv/ubuntu
 
       - name: copy source via ssh key
@@ -89,16 +89,16 @@ jobs:
         with:
           switches: -avzr --delete
           remote_path: /home/ubuntu/srv/ubuntu/
-          remote_host: ${{ secrets.HOST }}
+          remote_host: ${{ secrets.HOST_8TH_3 }}
           remote_user: ubuntu
-          remote_key: ${{ secrets.KEY }}
+          remote_key: ${{ secrets.KEY_8TH_3 }}
 
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}
+          host: ${{ secrets.HOST_8TH_3 }}
           username: ubuntu
-          key: ${{ secrets.KEY }}
+          key: ${{ secrets.KEY_8TH_3 }}
           script: |
             cd /home/ubuntu/srv/ubuntu
             sh ./config/scripts/docker-install.sh

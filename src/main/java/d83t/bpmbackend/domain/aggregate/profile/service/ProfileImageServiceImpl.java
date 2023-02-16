@@ -1,6 +1,7 @@
 package d83t.bpmbackend.domain.aggregate.profile.service;
 
 import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileDto;
+import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileRequest;
 import d83t.bpmbackend.domain.aggregate.profile.entity.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,7 +14,11 @@ import java.util.UUID;
 public class ProfileImageServiceImpl implements ProfileImageService {
 
     @Override
-    public void setUploadFile(ProfileDto profileDto, MultipartFile file) {
+    public ProfileDto setUploadFile(ProfileRequest profileRequest, MultipartFile file) {
+        ProfileDto profileDto = ProfileDto.builder()
+                .nickname(profileRequest.getNickname())
+                .bio(profileRequest.getBio())
+                .build();
         String path = getUploadPath();
         String newName = createNewFileName(file.getOriginalFilename());
         String filePath = path + newName;
@@ -24,6 +29,7 @@ public class ProfileImageServiceImpl implements ProfileImageService {
         } catch (IOException e){
             e.printStackTrace();
         }
+        return profileDto;
     }
 
     @Override

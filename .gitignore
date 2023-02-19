@@ -38,3 +38,9 @@ out/
 
 ### Mac ###
 .DS_Store
+
+### Image ###
+images/
+
+### local properties ###
+application-local.properties

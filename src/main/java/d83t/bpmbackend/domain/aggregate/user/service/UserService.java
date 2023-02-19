@@ -6,4 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
     ProfileResponse signUp(Long kakaoId, ProfileRequest profileRequest, MultipartFile file);
+
+    ProfileResponse verification(Long kakaoId);
 }

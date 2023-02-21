@@ -21,6 +21,8 @@ public class UserController {
     private final UserService userService;
 
     @Operation(summary = "카카오 로그인 API", description = "카카오 uid, profile에 대한 정보를 받아 프로필을 생성하고 로그인을 진행합니다.")
+    @ApiResponse(responseCode = "200", description = "신규 회원 등록 성공", content = @Content(schema = @Schema(implementation = ProfileResponse.class)))
+    @ApiResponse(responseCode = "409", description = "이미 존재하는 유저입니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     @PostMapping(path = "/signup")
     public ProfileResponse signUp(
             @RequestParam Long kakaoId,

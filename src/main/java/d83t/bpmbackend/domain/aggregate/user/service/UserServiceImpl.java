@@ -9,6 +9,7 @@ import d83t.bpmbackend.domain.aggregate.user.entity.User;
 import d83t.bpmbackend.domain.aggregate.user.repository.UserRepository;
 import d83t.bpmbackend.exception.CustomException;
 import d83t.bpmbackend.exception.Error;
+import d83t.bpmbackend.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,8 +23,14 @@ public class UserServiceImpl implements UserService {
     private final ProfileImageService profileImageService;
     private final UserRepository userRepository;
 
+    private final JwtService jwtService;
+
     @Override
     public ProfileResponse signUp(Long kakaoId, ProfileRequest profileRequest, MultipartFile file) {
+        Optional<User> findUser = userRepository.findByKakaoId(kakaoId);
+        if(findUser.isPresent()){
+            throw new CustomException(Error.USER_ALREADY_EXITS);
+        }
         ProfileDto profileDto = profileImageService.setUploadFile(profileRequest, file);
 
         Profile profile = profileImageService.convertProfileDto(profileDto);
@@ -35,6 +42,7 @@ public class UserServiceImpl implements UserService {
         return ProfileResponse.builder()
                 .nickname(profileDto.getNickname())
                 .bio(profileRequest.getBio())
+                .token(jwtService.createToken(profileRequest.getNickname()))
                 .build();
     }
 
@@ -47,6 +55,7 @@ public class UserServiceImpl implements UserService {
         return ProfileResponse.builder()
                 .nickname(userProfile.getNickName())
                 .bio(userProfile.getBio())
+                .token("secret")
                 .build();
     }
 }

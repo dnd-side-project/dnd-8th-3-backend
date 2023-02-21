@@ -11,8 +11,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonTypeName("profile")
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
 @Schema(description = "카카오 로그인 API 요청 DTO")
 public class ProfileRequest {
     @NotBlank

@@ -10,12 +10,14 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -28,6 +30,7 @@ public class UserController {
             @RequestParam Long kakaoId,
             @ModelAttribute ProfileRequest profileRequest,
             @RequestParam MultipartFile file) {
+        log.debug(kakaoId + profileRequest.getNickname() + profileRequest.getBio() + file.getOriginalFilename());
         return userService.signUp(kakaoId, profileRequest, file);
     }
 

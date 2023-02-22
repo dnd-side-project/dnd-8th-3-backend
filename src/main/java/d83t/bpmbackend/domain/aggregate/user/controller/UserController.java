@@ -30,7 +30,7 @@ public class UserController {
             @RequestParam Long kakaoId,
             @ModelAttribute ProfileRequest profileRequest,
             @RequestParam MultipartFile file) {
-        log.debug(kakaoId + profileRequest.getNickname() + profileRequest.getBio() + file.getOriginalFilename());
+        log.info(kakaoId +" " + profileRequest.getNickname() + " " +  profileRequest.getBio() + " " +file.getOriginalFilename());
         return userService.signUp(kakaoId, profileRequest, file);
     }
 

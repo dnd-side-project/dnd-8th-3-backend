@@ -4,6 +4,7 @@ import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileDto;
 import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileRequest;
 import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileResponse;
 import d83t.bpmbackend.domain.aggregate.profile.entity.Profile;
+import d83t.bpmbackend.domain.aggregate.profile.repository.ProfileRepository;
 import d83t.bpmbackend.domain.aggregate.profile.service.ProfileImageService;
 import d83t.bpmbackend.domain.aggregate.user.entity.User;
 import d83t.bpmbackend.domain.aggregate.user.repository.UserRepository;
@@ -22,6 +23,7 @@ public class UserServiceImpl implements UserService {
 
     private final ProfileImageService profileImageService;
     private final UserRepository userRepository;
+    private final ProfileRepository profileRepository;
 
     private final JwtService jwtService;
 
@@ -30,6 +32,10 @@ public class UserServiceImpl implements UserService {
         Optional<User> findUser = userRepository.findByKakaoId(kakaoId);
         if(findUser.isPresent()){
             throw new CustomException(Error.USER_ALREADY_EXITS);
+        }
+        //닉네임 중복여부
+        if(profileRepository.findByNickName(profileRequest.getNickname()).isPresent()){
+            throw new CustomException(Error.USER_NICKNAME_ALREADY_EXITS);
         }
         ProfileDto profileDto = profileImageService.setUploadFile(profileRequest, file);
 

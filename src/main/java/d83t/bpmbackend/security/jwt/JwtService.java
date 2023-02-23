@@ -1,6 +1,8 @@
 package d83t.bpmbackend.security.jwt;
 
+import d83t.bpmbackend.domain.aggregate.profile.entity.Profile;
 import d83t.bpmbackend.domain.aggregate.profile.service.UserServiceDetail;
+import d83t.bpmbackend.domain.aggregate.user.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -65,8 +67,8 @@ public class JwtService {
 
     public Authentication getAuthentication(String jwtToken) {
         UserDetails userDetails = userServiceDetail.loadUserByUsername(getNickname(jwtToken));
-
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        User user = (User)userDetails;
+        return new UsernamePasswordAuthenticationToken(user, "", userDetails.getAuthorities());
     }
 
 }

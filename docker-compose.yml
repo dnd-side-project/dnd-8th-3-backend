@@ -3,7 +3,7 @@ version: '3'
 services:
   web:
     container_name: web
-    image: teambpm2023/dnd-bpm
+    image: teambpm2023/dnd-bpm:main
     expose:
       - "8080"
     ports:

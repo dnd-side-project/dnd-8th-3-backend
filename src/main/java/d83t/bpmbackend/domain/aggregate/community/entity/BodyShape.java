@@ -8,6 +8,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Builder
 @Entity
 @Getter
@@ -23,8 +26,18 @@ public class BodyShape extends DateEntity {
     @Column
     private String content;
 
+    @OneToMany(mappedBy = "bodyShape", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BodyShapeImage> images;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Profile author;
+
+    public void addBodyShapeImage(BodyShapeImage bodyShapeImage){
+        if(this.images == null){
+            this.images = new ArrayList<>();
+        }
+        this.images.add(bodyShapeImage);
+    }
 
 }

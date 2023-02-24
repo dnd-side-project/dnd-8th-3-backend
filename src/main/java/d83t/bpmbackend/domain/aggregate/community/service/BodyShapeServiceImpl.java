@@ -11,6 +11,7 @@ import d83t.bpmbackend.domain.aggregate.user.repository.UserRepository;
 import d83t.bpmbackend.exception.CustomException;
 import d83t.bpmbackend.exception.Error;
 import d83t.bpmbackend.s3.S3UploaderService;
+import d83t.bpmbackend.utils.FileUtils;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +46,7 @@ public class BodyShapeServiceImpl implements BodyShapeService {
     @PostConstruct
     private void init() {
         if (env.equals("local")) {
-            this.fileDir = getUploadPath();
+            this.fileDir = FileUtils.getUploadPath();
         } else if (env.equals("prod")) {
             this.fileDir = this.bodyShapePath;
         }
@@ -73,11 +73,12 @@ public class BodyShapeServiceImpl implements BodyShapeService {
                 .build();
 
         for (MultipartFile file : files) {
-            String newName = createNewFileName(file.getOriginalFilename());
+            String newName = FileUtils.createNewFileName(file.getOriginalFilename());
             String filePath = fileDir + newName;
             bodyshape.addBodyShapeImage(BodyShapeImage.builder()
                     .originFileName(newName)
                     .storagePathName(filePath)
+                    .bodyShape(bodyshape)
                     .build());
             filePaths.add(filePath);
             if (env.equals("prod")) {
@@ -86,7 +87,7 @@ public class BodyShapeServiceImpl implements BodyShapeService {
                 try {
                     File localFile = new File(filePath);
                     file.transferTo(localFile);
-                    removeNewFile(localFile);
+                    FileUtils.removeNewFile(localFile);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -107,24 +108,4 @@ public class BodyShapeServiceImpl implements BodyShapeService {
                 .build();
     }
 
-    private void removeNewFile(File targetFile) {
-        if (targetFile.delete()) {
-            log.info("file delete success");
-            return;
-        }
-        log.info("file delete fail");
-    }
-
-    private String getUploadPath() {
-        String path = new File("").getAbsolutePath() + "/" + "bodyShapes/";
-        File file = new File(path);
-        if (!file.exists()) {
-            file.mkdir();
-        }
-        return path;
-    }
-
-    private String createNewFileName(String originalName) {
-        return UUID.randomUUID() + "." + originalName.substring(originalName.lastIndexOf("."));
-    }
 }

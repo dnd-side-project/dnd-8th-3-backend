@@ -8,6 +8,7 @@ import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileRequest;
 import d83t.bpmbackend.domain.aggregate.profile.entity.Profile;
 import d83t.bpmbackend.exception.CustomException;
 import d83t.bpmbackend.exception.Error;
+import d83t.bpmbackend.s3.S3UploaderService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,17 +25,15 @@ import java.util.UUID;
 @Slf4j
 public class ProfileImageServiceImpl implements ProfileImageService {
 
-    private final AmazonS3 s3Client;
+    private final S3UploaderService uploaderService;
 
     @Value("${bpm.s3.bucket.profile.path}")
     private String profilePath;
-    @Value("${aws.s3.bucketName}")
-    private String bucket;
+
     @Value("${spring.environment}")
     private String env;
 
     private String fileDir;
-
 
     @PostConstruct
     private void init() {
@@ -56,8 +55,8 @@ public class ProfileImageServiceImpl implements ProfileImageService {
         profileDto.setImageName(newName);
         profileDto.setImagePath(filePath);
         if (env.equals("prod")) {
-            putS3(file, bucket, newName);
-        } else if(env.equals("local")){
+            uploaderService.putS3(file, profilePath, newName);
+        } else if (env.equals("local")) {
             try {
                 File localFile = new File(filePath);
                 file.transferTo(localFile);
@@ -79,18 +78,6 @@ public class ProfileImageServiceImpl implements ProfileImageService {
                 .build();
     }
 
-    private void putS3(MultipartFile uploadFile, String bucket, String fileName) {
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentType(uploadFile.getContentType());
-        metadata.setContentLength(uploadFile.getSize());
-        fileName = profilePath + "/" + fileName;
-        try {
-            PutObjectRequest request = new PutObjectRequest(bucket, fileName, uploadFile.getInputStream(), metadata);
-            s3Client.putObject(request);
-        } catch (IOException e) {
-            throw new CustomException(Error.S3_UPLOAD_FAIL);
-        }
-    }
 
     private void removeNewFile(File targetFile) {
         if (targetFile.delete()) {

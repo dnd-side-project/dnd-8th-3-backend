@@ -1,11 +1,14 @@
 package d83t.bpmbackend.domain.aggregate.profile.entity;
 
+import d83t.bpmbackend.domain.aggregate.community.entity.BodyShape;
 import d83t.bpmbackend.domain.aggregate.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 
 @Builder
@@ -34,5 +37,8 @@ public class Profile {
 
     @OneToOne(mappedBy = "profile")
     private User user;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BodyShape> myBodyShapes;
 
 }

@@ -88,7 +88,7 @@ public class ProfileImageServiceImpl implements ProfileImageService {
     }
 
     private String getUploadPath() {
-        String path = new File("").getAbsolutePath() + "\\" + "images\\";
+        String path = new File("").getAbsolutePath() + "/" + "images/";
         File file = new File(path);
         if (!file.exists()) {
             file.mkdir();

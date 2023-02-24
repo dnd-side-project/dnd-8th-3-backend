@@ -47,7 +47,8 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return ProfileResponse.builder()
                 .nickname(profileDto.getNickname())
-                .bio(profileRequest.getBio())
+                .bio(profileDto.getBio())
+                .image(profileDto.getImagePath())
                 .token(jwtService.createToken(profileRequest.getNickname()))
                 .build();
     }

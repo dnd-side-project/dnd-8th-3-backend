@@ -14,7 +14,7 @@ import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
-public class S3UploaderServiceImpl implements S3UploaderService{
+public class S3UploaderServiceImpl implements S3UploaderService {
 
     private final AmazonS3 s3Client;
 
@@ -25,7 +25,7 @@ public class S3UploaderServiceImpl implements S3UploaderService{
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(uploadFile.getContentType());
         metadata.setContentLength(uploadFile.getSize());
-        fileName = path + "/" + fileName;
+        fileName = path + fileName;
         try {
             PutObjectRequest request = new PutObjectRequest(bucket, fileName, uploadFile.getInputStream(), metadata);
             s3Client.putObject(request);

@@ -28,7 +28,7 @@ public class User extends DateEntity implements UserDetails {
     @Column(nullable = false, unique = true)
     private Long kakaoId;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
     private Profile profile;
 

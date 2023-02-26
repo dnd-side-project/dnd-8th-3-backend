@@ -17,6 +17,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +59,7 @@ public class BodyShapeServiceImpl implements BodyShapeService {
     @Transactional
     public BodyShapeResponse createBoastArticle(User user, List<MultipartFile> files, BodyShapeRequest bodyShapeRequest) {
         //file은 최대 5개만 들어올 수 있다.
-        if(files.size() > 5){
+        if (files.size() > 5) {
             throw new CustomException(Error.FILE_SIZE_MAX);
         }
 
@@ -106,6 +109,31 @@ public class BodyShapeServiceImpl implements BodyShapeService {
                 .filesPath(filePaths)
                 .content(bodyshape.getContent())
                 .build();
+    }
+
+    @Override
+    public List<BodyShapeResponse> getBodyShapes(User user, Integer limit, Integer offset) {
+        List<BodyShape> bodyShapes = new ArrayList<>();
+        limit = limit == null ? 20 : limit;
+        offset = offset == null ? 0 : offset;
+        Pageable pageable = PageRequest.of(offset, limit);
+
+        bodyShapes = bodyShapeRepository.findByAll(pageable);
+
+        return bodyShapes.stream().map(bodyShape -> {
+            return BodyShapeResponse.builder()
+                    .content(bodyShape.getContent())
+                    .createdAt(bodyShape.getCreatedDate())
+                    .updatedAt(bodyShape.getModifiedDate())
+                    .filesPath(bodyShape.getImages().stream().map(images -> {
+                        return images.getStoragePathName();
+                    }).collect(Collectors.toList()))
+                    .author(BodyShapeResponse.Author.builder()
+                            .nickname(bodyShape.getAuthor().getNickName())
+                            .profilePath(bodyShape.getAuthor().getStoragePathName())
+                            .build())
+                    .build();
+        }).collect(Collectors.toList());
     }
 
 }

@@ -11,4 +11,6 @@ public interface BodyShapeService {
 
 
     BodyShapeResponse createBoastArticle(User user, List<MultipartFile> files, BodyShapeRequest boastArticleRequest);
+
+    List<BodyShapeResponse> getBodyShapes(User user, Integer limit, Integer offset);
 }

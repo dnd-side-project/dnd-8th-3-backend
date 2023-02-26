@@ -21,11 +21,19 @@ public class BodyShapeController {
     private final BodyShapeService bodyShapeService;
 
     @PostMapping
-    public BodyShapeResponse createBoastArticle(
+    public BodyShapeResponse.SigneBodyShapes createBoastArticle(
             @AuthenticationPrincipal User user,
             @RequestPart List<MultipartFile> files,
             @ModelAttribute BodyShapeRequest bodyShapeRequest) {
-        log.info(files.toString());
-        return bodyShapeService.createBoastArticle(user, files, bodyShapeRequest);
+        return BodyShapeResponse.SigneBodyShapes.builder().bodyShapeArticle(bodyShapeService.createBoastArticle(user, files, bodyShapeRequest)).build();
+    }
+
+    @GetMapping
+    public BodyShapeResponse.MultiBodyShapes getBodyShapes(
+            @AuthenticationPrincipal User user,
+            @RequestParam(value = "limit", required = false) Integer limit,
+            @RequestParam(value = "offset", required = false) Integer offset) {
+        List<BodyShapeResponse> bodyShapes = bodyShapeService.getBodyShapes(user, limit, offset);
+        return BodyShapeResponse.MultiBodyShapes.builder().bodyShapeArticles(bodyShapes).bodyShapeCount(bodyShapes.size()).build();
     }
 }

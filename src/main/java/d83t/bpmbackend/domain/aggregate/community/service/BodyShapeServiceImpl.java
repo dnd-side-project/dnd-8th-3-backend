@@ -138,4 +138,11 @@ public class BodyShapeServiceImpl implements BodyShapeService {
         }).collect(Collectors.toList());
     }
 
+    @Override
+    public BodyShapeResponse getBodyShape(User user, Long bodyShapeId) {
+
+
+        return null;
+    }
+
 }

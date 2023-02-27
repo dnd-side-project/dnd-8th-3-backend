@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 @Getter
 public class BodyShapeResponse {
+    private Long id;
     private String content;
 
     private ZonedDateTime createdAt;

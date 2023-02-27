@@ -100,6 +100,7 @@ public class BodyShapeServiceImpl implements BodyShapeService {
         bodyShapeRepository.save(bodyshape);
 
         return BodyShapeResponse.builder()
+                .id(bodyshape.getId())
                 .createdAt(bodyshape.getCreatedDate())
                 .author(BodyShapeResponse.Author.builder()
                         .nickname(profile.getNickName())
@@ -122,6 +123,7 @@ public class BodyShapeServiceImpl implements BodyShapeService {
 
         return bodyShapes.stream().map(bodyShape -> {
             return BodyShapeResponse.builder()
+                    .id(bodyShape.getId())
                     .content(bodyShape.getContent())
                     .createdAt(bodyShape.getCreatedDate())
                     .updatedAt(bodyShape.getModifiedDate())

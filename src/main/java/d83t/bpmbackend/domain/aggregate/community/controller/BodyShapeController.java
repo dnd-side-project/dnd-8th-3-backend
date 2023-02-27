@@ -21,11 +21,11 @@ public class BodyShapeController {
     private final BodyShapeService bodyShapeService;
 
     @PostMapping
-    public BodyShapeResponse.SigneBodyShapes createBoastArticle(
+    public BodyShapeResponse.SingleBodyShape createBoastArticle(
             @AuthenticationPrincipal User user,
             @RequestPart List<MultipartFile> files,
             @ModelAttribute BodyShapeRequest bodyShapeRequest) {
-        return BodyShapeResponse.SigneBodyShapes.builder().bodyShapeArticle(bodyShapeService.createBoastArticle(user, files, bodyShapeRequest)).build();
+        return BodyShapeResponse.SingleBodyShape.builder().bodyShapeArticle(bodyShapeService.createBoastArticle(user, files, bodyShapeRequest)).build();
     }
 
     @GetMapping

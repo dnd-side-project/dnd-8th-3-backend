@@ -6,6 +6,7 @@ import d83t.bpmbackend.domain.aggregate.community.entity.BodyShape;
 import d83t.bpmbackend.domain.aggregate.community.entity.BodyShapeImage;
 import d83t.bpmbackend.domain.aggregate.community.repository.BodyShapeRepository;
 import d83t.bpmbackend.domain.aggregate.profile.entity.Profile;
+import d83t.bpmbackend.domain.aggregate.profile.repository.ProfileRepository;
 import d83t.bpmbackend.domain.aggregate.user.entity.User;
 import d83t.bpmbackend.domain.aggregate.user.repository.UserRepository;
 import d83t.bpmbackend.exception.CustomException;
@@ -13,13 +14,14 @@ import d83t.bpmbackend.exception.Error;
 import d83t.bpmbackend.s3.S3UploaderService;
 import d83t.bpmbackend.utils.FileUtils;
 import jakarta.annotation.PostConstruct;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -37,6 +39,7 @@ public class BodyShapeServiceImpl implements BodyShapeService {
     private final UserRepository userRepository;
     private final S3UploaderService uploaderService;
     private final BodyShapeRepository bodyShapeRepository;
+    private final ProfileRepository profileRepository;
 
     @Value("${bpm.s3.bucket.bodyshape.path}")
     private String bodyShapePath;
@@ -56,7 +59,6 @@ public class BodyShapeServiceImpl implements BodyShapeService {
     }
 
     @Override
-    @Transactional
     public BodyShapeResponse createBoastArticle(User user, List<MultipartFile> files, BodyShapeRequest bodyShapeRequest) {
         //file은 최대 5개만 들어올 수 있다.
         if (files.size() > 5) {
@@ -112,14 +114,18 @@ public class BodyShapeServiceImpl implements BodyShapeService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<BodyShapeResponse> getBodyShapes(User user, Integer limit, Integer offset) {
         List<BodyShape> bodyShapes = new ArrayList<>();
         limit = limit == null ? 20 : limit;
         offset = offset == null ? 0 : offset;
         Pageable pageable = PageRequest.of(offset, limit);
+        Long profileId = user.getProfile().getId();
 
-        bodyShapes = bodyShapeRepository.findByAll(pageable);
+        Optional<Profile> findProfile = profileRepository.findById(profileId);
+        Profile profile = findProfile.get();
+        bodyShapes = bodyShapeRepository.findByNickName(pageable, profile.getNickName());
 
         return bodyShapes.stream().map(bodyShape -> {
             return BodyShapeResponse.builder()

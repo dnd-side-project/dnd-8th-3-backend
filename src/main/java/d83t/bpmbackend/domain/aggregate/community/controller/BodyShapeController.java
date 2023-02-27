@@ -38,12 +38,10 @@ public class BodyShapeController {
     }
 
     @GetMapping("/{bodyShapeId}")
-    public BodyShapeResponse.SigneBodyShapes getBodyShape(
+    public BodyShapeResponse.SingleBodyShape getBodyShape(
             @AuthenticationPrincipal User user,
-            @PathVariable Long bodyShapeId){
-        return BodyShapeResponse.SigneBodyShapes.builder().bodyShapeArticle(bodyShapeService.getBodyShape(user,bodyShapeId)).build();
+            @PathVariable Long bodyShapeId) {
+        return BodyShapeResponse.SingleBodyShape.builder().bodyShapeArticle(bodyShapeService.getBodyShape(user, bodyShapeId)).build();
     }
 
-
-    )
 }

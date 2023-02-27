@@ -44,4 +44,11 @@ public class BodyShapeController {
         return BodyShapeResponse.SingleBodyShape.builder().bodyShapeArticle(bodyShapeService.getBodyShape(user, bodyShapeId)).build();
     }
 
+    @DeleteMapping("/{bodyShapeId}")
+    public void deleteBodyShape(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long bodyShapeId) {
+        bodyShapeService.deleteBodyShape(user, bodyShapeId);
+    }
+
 }

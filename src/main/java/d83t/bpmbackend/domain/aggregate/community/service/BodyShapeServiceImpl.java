@@ -165,4 +165,10 @@ public class BodyShapeServiceImpl implements BodyShapeService {
                 .build();
     }
 
+    //TODO: 마찬가지로 향후 public이 생길시 작성 유저인지 판단하는 로직 추가
+    @Override
+    public void deleteBodyShape(User user, Long bodyShapeId) {
+
+    }
+
 }

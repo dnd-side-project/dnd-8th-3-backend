@@ -15,4 +15,6 @@ public interface BodyShapeService {
     List<BodyShapeResponse> getBodyShapes(User user, Integer limit, Integer offset);
 
     BodyShapeResponse getBodyShape(User user, Long bodyShapeId);
+
+    void deleteBodyShape(User user, Long bodyShapeId);
 }

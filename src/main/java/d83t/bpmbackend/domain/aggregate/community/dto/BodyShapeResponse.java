@@ -30,7 +30,7 @@ public class BodyShapeResponse {
 
     @Builder
     @Getter
-    public static class SigneBodyShapes{
+    public static class SingleBodyShape{
         BodyShapeResponse bodyShapeArticle;
     }
 

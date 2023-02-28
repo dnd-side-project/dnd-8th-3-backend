@@ -77,6 +77,30 @@ class UserControllerTest {
 
     @Test
     @WithAuthUser
+    void 스케줄_조회_테스트() throws Exception{
+        ScheduleDto scheduleDto = ScheduleDto.builder()
+                .date("2022-01-01")
+                .time("17:54:32")
+                .memo("메모입니다.")
+                .studioName("스튜디오 이롬")
+                .build();
+
+        ScheduleResponse scheduleResponse = ScheduleResponse.builder()
+                .studioName(scheduleDto.getStudioName())
+                .time(convertTimeFormat(scheduleDto.getTime()))
+                .date(convertDateFormat(scheduleDto.getDate()))
+                .memo(scheduleDto.getMemo())
+                .build();
+
+        Mockito.when(userService.getSchedule(Mockito.any(User.class))).thenReturn(scheduleResponse);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/schedule"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+    }
+
+    @Test
+    @WithAuthUser
     void 스케줄_등록_입력_테스트() throws Exception {
         ScheduleDto scheduleDto = ScheduleDto.builder()
                 .date("2022-01-01")

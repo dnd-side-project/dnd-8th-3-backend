@@ -1,9 +1,11 @@
 package d83t.bpmbackend.domain.aggregate.location.dto;
 
 import d83t.bpmbackend.domain.aggregate.location.entity.Location;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Getter
+@Schema(description = "위치 등록 응답 DTO")
 public class LocationResponseDto {
     private Long id;
     private String address;

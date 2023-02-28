@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,7 +28,7 @@ public class LocationController {
     @ApiResponse(responseCode = "201", description = "위치 등록 성공", content = @Content(schema = @Schema(implementation = LocationResponseDto.class)))
     @ApiResponse(responseCode = "409", description = "이미 등록된 위치 정보입니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     @PostMapping
-    public LocationResponseDto createLocation(@ModelAttribute LocationRequestDto locationRequestDto) {
+    public LocationResponseDto createLocation(@ModelAttribute @Valid LocationRequestDto locationRequestDto) {
         log.info("address: " + locationRequestDto.getAddress());
         return locationService.createLocation(locationRequestDto);
     }

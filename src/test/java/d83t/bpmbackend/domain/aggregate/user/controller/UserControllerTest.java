@@ -8,17 +8,21 @@ import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleResponse;
 import d83t.bpmbackend.domain.aggregate.user.service.UserServiceImpl;
 import d83t.bpmbackend.exception.CustomException;
 import d83t.bpmbackend.exception.Error;
+import d83t.bpmbackend.security.WebConfig;
 import d83t.bpmbackend.security.jwt.JwtService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,6 +31,7 @@ import java.util.Random;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
+@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(controllers = UserController.class)
 class UserControllerTest {
 
@@ -51,7 +56,6 @@ class UserControllerTest {
                 .nickname("nickname")
                 .bio("bio")
                 .build();
-
         Mockito.when(userService.verification(Mockito.eq(kakaoId))).thenReturn(profileResponse);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/" + kakaoId + "/verification"))
                 .andExpect(MockMvcResultMatchers.status().isOk())

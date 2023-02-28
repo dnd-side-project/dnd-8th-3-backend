@@ -1,8 +1,9 @@
 package d83t.bpmbackend.domain.aggregate.user.controller;
 
-import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileDto;
 import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileRequest;
 import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileResponse;
+import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleDto;
+import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleResponse;
 import d83t.bpmbackend.domain.aggregate.user.service.UserService;
 import d83t.bpmbackend.exception.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,5 +41,11 @@ public class UserController {
     @GetMapping(path = "/{kakaoId}/verification")
     public ProfileResponse verification(@PathVariable Long kakaoId) {
         return userService.verification(kakaoId);
+    }
+
+    @PostMapping("/schedule")
+    public ScheduleResponse registerSchedule(@RequestBody ScheduleDto scheduleDto){
+        log.info("request : "+ scheduleDto.toString());
+        return userService.registerSchedule(scheduleDto);
     }
 }

@@ -31,6 +31,8 @@ public class StudioServiceImpl implements StudioService {
         Studio studio = Studio.builder()
                 .name(requestDto.getName())
                 .location(location)
+                .firstTag(requestDto.getFirstTag())
+                .secondTag(requestDto.getSecondTag())
                 .phone(requestDto.getPhone())
                 .sns(requestDto.getSns())
                 .openHours(requestDto.getOpenHours())

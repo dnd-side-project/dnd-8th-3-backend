@@ -24,6 +24,12 @@ public class Studio extends DateEntity {
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
+    @Column(nullable = false)
+    private String firstTag;
+
+    @Column(nullable = false)
+    private String secondTag;
+
     // TODO: recommends 필드 추가
 
     @Column
@@ -54,9 +60,11 @@ public class Studio extends DateEntity {
     private int scrapCount;
 
     @Builder
-    public Studio(String name, Location location, int phone, String sns, String openHours, String price) {
+    public Studio(String name, Location location, String firstTag, String secondTag, int phone, String sns, String openHours, String price) {
         this.name = name;
         this.location = location;
+        this.firstTag = firstTag;
+        this.secondTag = secondTag;
         this.phone = phone;
         this.sns = sns;
         this.openHours = openHours;

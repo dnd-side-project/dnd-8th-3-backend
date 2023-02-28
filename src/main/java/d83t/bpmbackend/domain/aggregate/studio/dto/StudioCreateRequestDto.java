@@ -14,15 +14,21 @@ public class StudioCreateRequestDto {
     private String name;
     @NotNull
     private Long locationId;
+    @NotBlank
+    private String firstTag;
+    @NotBlank
+    private String secondTag;
     private int phone;
     private String sns;
     private String openHours;
     private String price;
 
     @Builder
-    public StudioCreateRequestDto(String name, Long locationId, int phone, String sns, String openHours, String price) {
+    public StudioCreateRequestDto(String name, Long locationId, String firstTag, String secondTag, int phone, String sns, String openHours, String price) {
         this.name = name;
         this.locationId = locationId;
+        this.firstTag = firstTag;
+        this.secondTag = secondTag;
         this.phone = phone;
         this.sns = sns;
         this.openHours = openHours;

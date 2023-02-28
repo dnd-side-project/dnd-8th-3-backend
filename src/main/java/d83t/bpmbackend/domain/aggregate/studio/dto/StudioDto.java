@@ -16,6 +16,8 @@ public class StudioDto {
     private Long id;
     private String name;
     private Location location;
+    private String firstTag;
+    private String secondTag;
     private int phone;
     private String sns;
     private String openHours;
@@ -32,6 +34,8 @@ public class StudioDto {
         this.id = studio.getId();
         this.name = studio.getName();
         this.location = studio.getLocation();
+        this.firstTag = studio.getFirstTag();
+        this.secondTag = studio.getSecondTag();
         this.phone = studio.getPhone();
         this.sns = studio.getSns();
         this.openHours = studio.getOpenHours();

@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -19,11 +21,10 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     @Transactional
-    public LocationResponseDto createLocation(LocationRequestDto locationRequestDto) {
-        if (locationRepository.existsLocationByLatitudeAndLongitude(locationRequestDto.getLatitude(), locationRequestDto.getLongitude())) {
-            throw new CustomException(Error.LOCATION_ALREADY_EXISTS);
-        }
-        Location location = locationRepository.save(locationRequestDto.toEntity());
+    public LocationResponseDto createLocation(LocationRequestDto requestDto) {
+        Location location = locationRepository.findByLatitudeAndLongitude(requestDto.getLatitude(), requestDto.getLongitude())
+                .orElseGet(() -> locationRepository.save(requestDto.toEntity()));
+
         return new LocationResponseDto(location);
     }
 

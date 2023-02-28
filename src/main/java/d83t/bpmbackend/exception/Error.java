@@ -13,7 +13,6 @@ public enum Error {
     DUPLICATE_USER_NICK_NAME("duplicate user nickname", HttpStatus.CONFLICT),
     FILE_SIZE_MAX("a Maximum of 5 files can Come in", HttpStatus.BAD_REQUEST),
     NOT_FOUND_LOCATION("location not found", HttpStatus.NOT_FOUND),
-    LOCATION_ALREADY_EXISTS("location already exists", HttpStatus.CONFLICT),
     NOT_FOUND_STUDIO("studio not found", HttpStatus.NOT_FOUND),
     STUDIO_ALREADY_EXISTS("studio already exists", HttpStatus.CONFLICT);
 

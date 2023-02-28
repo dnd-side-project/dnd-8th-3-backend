@@ -4,6 +4,7 @@ import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileRequest;
 import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileResponse;
 import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleDto;
 import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleResponse;
+import d83t.bpmbackend.domain.aggregate.user.entity.User;
 import d83t.bpmbackend.domain.aggregate.user.service.UserService;
 import d83t.bpmbackend.exception.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,8 +46,8 @@ public class UserController {
     }
 
     @PostMapping("/schedule")
-    public ScheduleResponse registerSchedule(@RequestBody ScheduleDto scheduleDto){
+    public ScheduleResponse registerSchedule(@AuthenticationPrincipal User user, @RequestBody ScheduleDto scheduleDto){
         log.info("request : "+ scheduleDto.toString());
-        return userService.registerSchedule(scheduleDto);
+        return userService.registerSchedule(user, scheduleDto);
     }
 }

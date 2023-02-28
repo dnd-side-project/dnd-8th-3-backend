@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ScheduleResponse registerSchedule(ScheduleDto scheduleDto) {
+    public ScheduleResponse registerSchedule(User user, ScheduleDto scheduleDto) {
         Optional<Studio> findStudio = studioRepository.findByName(scheduleDto.getStudioName());
         if (findStudio.isEmpty()) {
             throw new CustomException(Error.NOT_FOUND_STUDIO);
@@ -87,6 +87,7 @@ public class UserServiceImpl implements UserService {
 
         Schedule schedule = Schedule.builder()
                 .studio(studio)
+                .user(user)
                 .date(convertDateFormat(scheduleDto.getDate()))
                 .time(convertTimeFormat(scheduleDto.getTime()))
                 .memo(scheduleDto.getMemo())
@@ -99,6 +100,7 @@ public class UserServiceImpl implements UserService {
                 .memo(schedule.getMemo())
                 .build();
     }
+
 
     private LocalDate convertDateFormat(String date) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

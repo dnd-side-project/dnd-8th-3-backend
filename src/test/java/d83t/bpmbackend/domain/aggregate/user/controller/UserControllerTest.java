@@ -5,6 +5,7 @@ import d83t.bpmbackend.config.WithAuthUser;
 import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileResponse;
 import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleDto;
 import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleResponse;
+import d83t.bpmbackend.domain.aggregate.user.entity.User;
 import d83t.bpmbackend.domain.aggregate.user.service.UserServiceImpl;
 import d83t.bpmbackend.exception.CustomException;
 import d83t.bpmbackend.exception.Error;
@@ -91,7 +92,7 @@ class UserControllerTest {
                 .memo(scheduleDto.getMemo())
                 .build();
 
-        Mockito.when(userService.registerSchedule(Mockito.any(ScheduleDto.class))).thenReturn(scheduleResponse);
+        Mockito.when(userService.registerSchedule(Mockito.any(User.class),Mockito.any(ScheduleDto.class))).thenReturn(scheduleResponse);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users/schedule")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(scheduleDto))

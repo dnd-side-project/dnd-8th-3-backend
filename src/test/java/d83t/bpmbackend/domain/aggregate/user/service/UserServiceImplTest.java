@@ -5,6 +5,7 @@ import d83t.bpmbackend.domain.aggregate.studio.repository.StudioRepository;
 import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleDto;
 import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleResponse;
 import d83t.bpmbackend.domain.aggregate.user.entity.Schedule;
+import d83t.bpmbackend.domain.aggregate.user.entity.User;
 import d83t.bpmbackend.domain.aggregate.user.repository.ScheduleRepository;
 import d83t.bpmbackend.domain.aggregate.user.repository.UserRepository;
 import d83t.bpmbackend.security.jwt.JwtService;
@@ -43,6 +44,9 @@ class UserServiceImplTest {
                 .studioName("스튜디오 이롬")
                 .build();
 
+        User user = User.builder()
+                        .build();
+
         Mockito.when(studioRepository.findByName(Mockito.any(String.class))).thenReturn(
                 Optional.of(Studio.builder()
                         .name("스튜디오이름")
@@ -50,6 +54,6 @@ class UserServiceImplTest {
 
         Mockito.when(scheduleRepository.save(Mockito.any(Schedule.class))).thenReturn(null);
 
-        userService.registerSchedule(scheduleDto);
+        userService.registerSchedule(user, scheduleDto);
     }
 }

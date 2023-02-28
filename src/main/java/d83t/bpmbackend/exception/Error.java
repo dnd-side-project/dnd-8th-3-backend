@@ -11,7 +11,9 @@ public enum Error {
     S3_UPLOAD_FAIL("upload fail", HttpStatus.INTERNAL_SERVER_ERROR),
     S3_GET_FILE_FAIL("fail to get file", HttpStatus.INTERNAL_SERVER_ERROR),
     DUPLICATE_USER_NICK_NAME("duplicate user nickname", HttpStatus.CONFLICT),
-    FILE_SIZE_MAX("a Maximum of 5 files can Come in", HttpStatus.BAD_REQUEST);
+    FILE_SIZE_MAX("a Maximum of 5 files can Come in", HttpStatus.BAD_REQUEST),
+    NOT_FOUND_LOCATION("location not found", HttpStatus.NOT_FOUND),
+    LOCATION_ALREADY_EXISTS("location already exists", HttpStatus.CONFLICT);
 
     private final String message;
     private final HttpStatus status;

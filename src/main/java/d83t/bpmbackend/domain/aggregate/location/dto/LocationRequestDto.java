@@ -14,12 +14,12 @@ public class LocationRequestDto {
     @NotBlank
     private String address;
     @NotNull
-    private int latitude;
+    private double latitude;
     @NotNull
-    private int longitude;
+    private double longitude;
 
     @Builder
-    public LocationRequestDto(String address, int latitude, int longitude) {
+    public LocationRequestDto(String address, double latitude, double longitude) {
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;

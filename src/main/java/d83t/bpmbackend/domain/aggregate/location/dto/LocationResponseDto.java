@@ -9,8 +9,8 @@ import lombok.Getter;
 public class LocationResponseDto {
     private Long id;
     private String address;
-    private int latitude;
-    private int longitude;
+    private double latitude;
+    private double longitude;
 
     public LocationResponseDto(Location location) {
         this.id = location.getId();

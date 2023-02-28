@@ -4,16 +4,14 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.ZonedDateTime;
 import java.util.List;
 
 @Builder
 @Getter
-@JsonTypeName("boast")
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
 public class BodyShapeResponse {
+    private Long id;
     private String content;
 
     private ZonedDateTime createdAt;
@@ -28,5 +26,18 @@ public class BodyShapeResponse {
     public static class Author{
         private String nickname;
         private String profilePath;
+    }
+
+    @Builder
+    @Getter
+    public static class SingleBodyShape{
+        BodyShapeResponse bodyShapeArticle;
+    }
+
+    @Builder
+    @Getter
+    public static class MultiBodyShapes{
+        List<BodyShapeResponse> bodyShapeArticles;
+        Integer bodyShapeCount;
     }
 }

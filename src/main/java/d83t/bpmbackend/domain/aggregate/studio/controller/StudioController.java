@@ -11,10 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,5 +29,12 @@ public class StudioController {
     public StudioDto createStudio(@ModelAttribute @Valid StudioCreateRequestDto requestDto) {
         log.info("name : " + requestDto.getName());
         return studioService.createStudio(requestDto);
+    }
+
+    @Operation(summary = "스튜디오 찾기 API")
+    @GetMapping()
+    public StudioDto searchStudio(@RequestParam String q){
+        log.info("query param:" + q);
+        return studioService.searchStudio(q);
     }
 }

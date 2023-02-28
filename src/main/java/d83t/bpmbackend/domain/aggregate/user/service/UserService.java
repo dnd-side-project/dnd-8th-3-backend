@@ -14,4 +14,5 @@ public interface UserService {
 
     ScheduleResponse registerSchedule(User user, ScheduleDto scheduleDto);
 
+    ScheduleResponse getSchedule(User user);
 }

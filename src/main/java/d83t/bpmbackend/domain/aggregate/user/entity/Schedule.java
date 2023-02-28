@@ -32,6 +32,7 @@ public class Schedule {
     private String memo;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)

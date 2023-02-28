@@ -19,6 +19,7 @@ import d83t.bpmbackend.exception.Error;
 import d83t.bpmbackend.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -97,6 +98,22 @@ public class UserServiceImpl implements UserService {
                 .studioName(scheduleDto.getStudioName())
                 .time(schedule.getTime())
                 .date(schedule.getDate())
+                .memo(schedule.getMemo())
+                .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ScheduleResponse getSchedule(User user) {
+        Optional<Schedule> findSchedule = scheduleRepository.findByUserId(user.getId());
+        if(findSchedule.isEmpty()){
+            throw new CustomException(Error.NOT_FOUND_SCHEDULE);
+        }
+        Schedule schedule = findSchedule.get();
+        return ScheduleResponse.builder()
+                .date(schedule.getDate())
+                .time(schedule.getTime())
+                .studioName(schedule.getStudio().getName())
                 .memo(schedule.getMemo())
                 .build();
     }

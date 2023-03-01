@@ -11,5 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 public interface UserService {
     ProfileResponse signUp(ProfileRequest profileRequest, MultipartFile file);
     ScheduleResponse registerSchedule(User user, ScheduleDto scheduleDto);
+    ScheduleResponse getSchedule(User user);
     ProfileResponse verification(UserRequestDto userRequestDto);
 }

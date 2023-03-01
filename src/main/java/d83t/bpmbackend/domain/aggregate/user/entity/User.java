@@ -32,8 +32,7 @@ public class User extends DateEntity implements UserDetails {
     @JoinColumn(nullable = false)
     private Profile profile;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Schedule schedule;
 
     @Override

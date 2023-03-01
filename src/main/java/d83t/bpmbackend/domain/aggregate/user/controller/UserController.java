@@ -46,6 +46,12 @@ public class UserController {
         return userService.verification(userRequestDto);
     }
 
+    @GetMapping("/schedule")
+    public ScheduleResponse getSchedule(@AuthenticationPrincipal User user){
+        log.info("request user : " + user.getKakaoId());
+        return userService.getSchedule(user);
+    }
+
     @PostMapping("/schedule")
     public ScheduleResponse registerSchedule(@AuthenticationPrincipal User user, @RequestBody ScheduleDto scheduleDto){
         log.info("request : "+ scheduleDto.toString());

@@ -9,6 +9,7 @@ import d83t.bpmbackend.domain.aggregate.user.entity.User;
 import d83t.bpmbackend.domain.aggregate.user.repository.ScheduleRepository;
 import d83t.bpmbackend.domain.aggregate.user.repository.UserRepository;
 import d83t.bpmbackend.security.jwt.JwtService;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,6 +37,26 @@ class UserServiceImplTest {
     private JwtService jwtService;
 
     @Test
+    void 스케줄조회하기() {
+
+        User user = User.builder()
+                .id(99877L)
+                .build();
+
+        Mockito.when(scheduleRepository.findByUserId(Mockito.eq(user.getId()))).thenReturn(
+                Optional.of(Schedule.builder()
+                        .studio(Studio.builder()
+                                .name("스튜디오이름")
+                                .build())
+                        .memo("메모")
+                        .build()));
+
+        ScheduleResponse schedule = userService.getSchedule(user);
+        Assertions.assertThat(schedule.getMemo()).isEqualTo("메모");
+        Assertions.assertThat(schedule.getStudioName()).isEqualTo("스튜디오이름");
+    }
+
+    @Test
     void 스케줄등록하기() {
         ScheduleDto scheduleDto = ScheduleDto.builder()
                 .date("2022-01-01")
@@ -45,7 +66,7 @@ class UserServiceImplTest {
                 .build();
 
         User user = User.builder()
-                        .build();
+                .build();
 
         Mockito.when(studioRepository.findByName(Mockito.any(String.class))).thenReturn(
                 Optional.of(Studio.builder()

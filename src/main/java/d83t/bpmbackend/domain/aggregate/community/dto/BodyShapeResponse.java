@@ -1,7 +1,5 @@
 package d83t.bpmbackend.domain.aggregate.community.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -3,7 +3,7 @@ package d83t.bpmbackend.domain.aggregate.user.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import d83t.bpmbackend.config.WithAuthUser;
 import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileResponse;
-import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleDto;
+import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleRequest;
 import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleResponse;
 import d83t.bpmbackend.domain.aggregate.user.dto.UserRequestDto;
 import d83t.bpmbackend.domain.aggregate.user.entity.User;
@@ -85,7 +85,7 @@ class UserControllerTest {
     @Test
     @WithAuthUser
     void 스케줄_조회_테스트() throws Exception{
-        ScheduleDto scheduleDto = ScheduleDto.builder()
+        ScheduleRequest scheduleRequest = ScheduleRequest.builder()
                 .date("2022-01-01")
                 .time("17:54:32")
                 .memo("메모입니다.")
@@ -93,10 +93,10 @@ class UserControllerTest {
                 .build();
 
         ScheduleResponse scheduleResponse = ScheduleResponse.builder()
-                .studioName(scheduleDto.getStudioName())
-                .time(convertTimeFormat(scheduleDto.getTime()))
-                .date(convertDateFormat(scheduleDto.getDate()))
-                .memo(scheduleDto.getMemo())
+                .studioName(scheduleRequest.getStudioName())
+                .time(convertTimeFormat(scheduleRequest.getTime()))
+                .date(convertDateFormat(scheduleRequest.getDate()))
+                .memo(scheduleRequest.getMemo())
                 .build();
 
         Mockito.when(userService.getSchedule(Mockito.any(User.class))).thenReturn(scheduleResponse);
@@ -109,7 +109,7 @@ class UserControllerTest {
     @Test
     @WithAuthUser
     void 스케줄_등록_입력_테스트() throws Exception {
-        ScheduleDto scheduleDto = ScheduleDto.builder()
+        ScheduleRequest scheduleRequest = ScheduleRequest.builder()
                 .date("2022-01-01")
                 .time("17:54:32")
                 .memo("메모입니다.")
@@ -117,16 +117,16 @@ class UserControllerTest {
                 .build();
 
         ScheduleResponse scheduleResponse = ScheduleResponse.builder()
-                .studioName(scheduleDto.getStudioName())
-                .time(convertTimeFormat(scheduleDto.getTime()))
-                .date(convertDateFormat(scheduleDto.getDate()))
-                .memo(scheduleDto.getMemo())
+                .studioName(scheduleRequest.getStudioName())
+                .time(convertTimeFormat(scheduleRequest.getTime()))
+                .date(convertDateFormat(scheduleRequest.getDate()))
+                .memo(scheduleRequest.getMemo())
                 .build();
 
-        Mockito.when(userService.registerSchedule(Mockito.any(User.class),Mockito.any(ScheduleDto.class))).thenReturn(scheduleResponse);
+        Mockito.when(userService.registerSchedule(Mockito.any(User.class),Mockito.any(ScheduleRequest.class))).thenReturn(scheduleResponse);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users/schedule")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(scheduleDto))
+                        .content(objectMapper.writeValueAsString(scheduleRequest))
                         .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }

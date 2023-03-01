@@ -2,7 +2,7 @@ package d83t.bpmbackend.domain.aggregate.user.controller;
 
 import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileRequest;
 import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileResponse;
-import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleDto;
+import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleRequest;
 import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleResponse;
 import d83t.bpmbackend.domain.aggregate.user.entity.User;
 import d83t.bpmbackend.domain.aggregate.user.dto.UserRequestDto;
@@ -60,8 +60,8 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "내 일정 등록 성공", content = @Content(schema = @Schema(implementation = ScheduleResponse.class)))
     @ApiResponse(responseCode = "404", description = "스튜디오 이름이 잘못 들어왔습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     @PostMapping("/schedule")
-    public ScheduleResponse registerSchedule(@AuthenticationPrincipal User user, @RequestBody ScheduleDto scheduleDto){
-        log.info("request : "+ scheduleDto.toString());
-        return userService.registerSchedule(user, scheduleDto);
+    public ScheduleResponse registerSchedule(@AuthenticationPrincipal User user, @RequestBody ScheduleRequest scheduleRequest){
+        log.info("request : "+ scheduleRequest.toString());
+        return userService.registerSchedule(user, scheduleRequest);
     }
 }

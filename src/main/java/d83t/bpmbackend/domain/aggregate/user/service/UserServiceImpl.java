@@ -8,7 +8,7 @@ import d83t.bpmbackend.domain.aggregate.profile.repository.ProfileRepository;
 import d83t.bpmbackend.domain.aggregate.profile.service.ProfileImageService;
 import d83t.bpmbackend.domain.aggregate.studio.entity.Studio;
 import d83t.bpmbackend.domain.aggregate.studio.repository.StudioRepository;
-import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleDto;
+import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleRequest;
 import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleResponse;
 import d83t.bpmbackend.domain.aggregate.user.dto.UserRequestDto;
 import d83t.bpmbackend.domain.aggregate.user.entity.Schedule;
@@ -82,8 +82,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public ScheduleResponse registerSchedule(User user, ScheduleDto scheduleDto) {
-        Optional<Studio> findStudio = studioRepository.findByName(scheduleDto.getStudioName());
+    public ScheduleResponse registerSchedule(User user, ScheduleRequest scheduleRequest) {
+        Optional<Studio> findStudio = studioRepository.findByName(scheduleRequest.getStudioName());
         if (findStudio.isEmpty()) {
             throw new CustomException(Error.NOT_FOUND_STUDIO);
         }
@@ -92,13 +92,13 @@ public class UserServiceImpl implements UserService {
         Schedule schedule = Schedule.builder()
                 .studio(studio)
                 .user(user)
-                .date(convertDateFormat(scheduleDto.getDate()))
-                .time(convertTimeFormat(scheduleDto.getTime()))
-                .memo(scheduleDto.getMemo())
+                .date(convertDateFormat(scheduleRequest.getDate()))
+                .time(convertTimeFormat(scheduleRequest.getTime()))
+                .memo(scheduleRequest.getMemo())
                 .build();
         scheduleRepository.save(schedule);
         return ScheduleResponse.builder()
-                .studioName(scheduleDto.getStudioName())
+                .studioName(scheduleRequest.getStudioName())
                 .time(schedule.getTime())
                 .date(schedule.getDate())
                 .memo(schedule.getMemo())

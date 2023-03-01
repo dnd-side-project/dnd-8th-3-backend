@@ -67,7 +67,7 @@ public class StudioController {
         return reviewService.createReview(studioId, user, files, requestDto);
     }
 
-    @Operation(summary = "리뷰 리스트 조회 API")
+    @Operation(summary = "리뷰 리스트 조회 API", description = "sort 는 최신순(createdDate) / 좋아요순(likeCount) 와 같이 넘겨주시면 됩니다.")
     @GetMapping("/{studioId}/review")
     public List<ReviewResponseDto> findAllReviews (
             @PathVariable Long studioId,

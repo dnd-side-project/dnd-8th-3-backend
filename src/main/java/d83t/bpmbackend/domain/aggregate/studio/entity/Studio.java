@@ -24,10 +24,10 @@ public class Studio extends DateEntity {
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
-    @Column(nullable = false)
+    @Column
     private String firstTag;
 
-    @Column(nullable = false)
+    @Column
     private String secondTag;
 
     // TODO: recommends 필드 추가
@@ -50,13 +50,13 @@ public class Studio extends DateEntity {
     @Column
     private String content;
 
-    @Column(nullable = false, columnDefinition = "double default 0.0")
+    @Column(columnDefinition = "double default 0.0")
     private double rating;
 
-    @Column(nullable = false, columnDefinition = "int default 0")
+    @Column(columnDefinition = "int default 0")
     private int reviewCount;
 
-    @Column(nullable = false, columnDefinition = "int default 0")
+    @Column(columnDefinition = "int default 0")
     private int scrapCount;
 
     @Builder

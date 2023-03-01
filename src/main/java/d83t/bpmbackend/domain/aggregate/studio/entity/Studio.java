@@ -21,7 +21,7 @@ public class Studio extends DateEntity {
     private String name;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "location_id", nullable = false)
+    @JoinColumn(name = "location_id")
     private Location location;
 
     @Column
@@ -50,7 +50,7 @@ public class Studio extends DateEntity {
     @Column
     private String content;
 
-    @Column
+    @Column(columnDefinition = "double default 0.0")
     private double rating;
 
     @Column(columnDefinition = "int default 0")
@@ -88,12 +88,20 @@ public class Studio extends DateEntity {
 
     public void addReview(Review review) {
         this.reviews.add(review);
+        if (review.getRating() != 0.0) {
+            double avg = ((this.rating * reviewCount) + review.getRating()) / (reviewCount + 1);
+            this.rating = avg;
+        }
         this.reviewCount += 1;
         review.setStudio(this);
     }
 
     public void removeReview(Review review) {
         this.reviews.remove(review);
+        if (review.getRating() != 0.0) {
+            double avg = ((this.rating * reviewCount) - review.getRating()) / (reviewCount - 1);
+            this.rating = avg;
+        }
         this.reviewCount -= 1;
         review.setStudio(null);
     }

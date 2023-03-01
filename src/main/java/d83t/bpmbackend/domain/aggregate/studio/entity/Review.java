@@ -21,11 +21,11 @@ public class Review extends DateEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "studio_id", nullable = false)
+    @JoinColumn(name = "studio_id")
     private Studio studio;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private Profile author;
 
     @Column

@@ -2,6 +2,9 @@ package d83t.bpmbackend.domain.aggregate.user.controller;
 
 import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileRequest;
 import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileResponse;
+import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleDto;
+import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleResponse;
+import d83t.bpmbackend.domain.aggregate.user.entity.User;
 import d83t.bpmbackend.domain.aggregate.user.dto.UserRequestDto;
 import d83t.bpmbackend.domain.aggregate.user.service.UserService;
 import d83t.bpmbackend.exception.ErrorResponse;
@@ -11,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,5 +44,11 @@ public class UserController {
     public ProfileResponse verification(@RequestBody UserRequestDto userRequestDto) {
         log.info("id:" + userRequestDto.getKakaoId());
         return userService.verification(userRequestDto);
+    }
+
+    @PostMapping("/schedule")
+    public ScheduleResponse registerSchedule(@AuthenticationPrincipal User user, @RequestBody ScheduleDto scheduleDto){
+        log.info("request : "+ scheduleDto.toString());
+        return userService.registerSchedule(user, scheduleDto);
     }
 }

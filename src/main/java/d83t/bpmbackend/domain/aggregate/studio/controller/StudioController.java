@@ -39,4 +39,11 @@ public class StudioController {
         log.info("id : " + studioId);
         return studioService.findById(studioId);
     }
+
+    @Operation(summary = "스튜디오 찾기 API")
+    @GetMapping()
+    public StudioResponseDto searchStudio(@RequestParam String q){
+        log.info("query param:" + q);
+        return studioService.searchStudio(q);
+    }
 }

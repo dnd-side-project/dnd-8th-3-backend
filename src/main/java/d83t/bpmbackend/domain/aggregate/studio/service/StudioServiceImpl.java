@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -51,5 +52,14 @@ public class StudioServiceImpl implements StudioService {
         Studio studio = studioRepository.findById(studioId)
                 .orElseThrow(() -> new CustomException(Error.NOT_FOUND_STUDIO));
         return new StudioResponseDto(studio);
+    }
+
+    @Override
+    public StudioResponseDto searchStudio(String q) {
+        Optional<Studio> studio = studioRepository.findByName(q);
+        if(studio.isEmpty()){
+            throw new CustomException(Error.NOT_FOUND_STUDIO);
+        }
+        return new StudioResponseDto(studio.get());
     }
 }

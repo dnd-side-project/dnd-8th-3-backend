@@ -32,6 +32,7 @@ public class StudioResponseDto {
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
 
+    @Builder
     public StudioResponseDto(Studio studio) {
         this.id = studio.getId();
         this.name = studio.getName();

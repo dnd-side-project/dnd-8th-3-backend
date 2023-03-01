@@ -30,11 +30,13 @@ public class StudioServiceImpl implements StudioService {
             throw new CustomException(Error.STUDIO_ALREADY_EXISTS);
         }
 
+        String[] address = location.getAddress().split(" ");
+
         Studio studio = Studio.builder()
                 .name(requestDto.getName())
                 .location(location)
-                .firstTag(requestDto.getFirstTag())
-                .secondTag(requestDto.getSecondTag())
+                .firstTag(address[0])
+                .secondTag(address[1])
                 .phone(requestDto.getPhone())
                 .sns(requestDto.getSns())
                 .openHours(requestDto.getOpenHours())

@@ -64,6 +64,7 @@ public class UserServiceImpl implements UserService {
                 .nickname(userProfile.getNickName())
                 .bio(userProfile.getBio())
                 .token(jwtService.createToken(userProfile.getNickName()))
+                .image(userProfile.getStoragePathName())
                 .build();
     }
 }

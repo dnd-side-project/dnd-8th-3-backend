@@ -67,8 +67,19 @@ public class StudioController {
         return reviewService.createReview(studioId, user, files, requestDto);
     }
 
-    @Operation(summary = "리뷰 단건 조회 API")
-    @PostMapping("/{studioId}/review/{reviewId}")
+    @Operation(summary = "리뷰 리스트 조회 API")
+    @GetMapping("/{studioId}/review")
+    public List<ReviewResponseDto> findAllReviews (
+            @PathVariable Long studioId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "createdDate") String sort){
+        log.info("page : " + page + " / size : " + size + " / sort : " + sort);
+        return reviewService.findAll(studioId, page, size, sort);
+    }
+
+    @Operation(summary = "리뷰 상세 조회 API")
+    @GetMapping("/{studioId}/review/{reviewId}")
     public ReviewResponseDto findReviewDetail(@PathVariable Long reviewId) {
         log.info("review id : " + reviewId);
         return reviewService.findById(reviewId);

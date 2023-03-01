@@ -103,4 +103,18 @@ public class ReviewServiceImpl implements ReviewService {
 
         return new ReviewResponseDto(review);
     }
+
+    // TODO: 작성자인지 판단하는 검증 로직 추가
+    @Override
+    @Transactional
+    public void deleteReview(User user, Long studioId, Long reviewId) {
+        Studio studio = studioRepository.findById(studioId)
+                .orElseThrow(() -> new CustomException(Error.NOT_FOUND_STUDIO));
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new CustomException(Error.NOT_FOUND_REVIEW));
+
+        studio.removeReview(review);
+        studioRepository.save(studio);
+        reviewRepository.delete(review);
+    }
 }

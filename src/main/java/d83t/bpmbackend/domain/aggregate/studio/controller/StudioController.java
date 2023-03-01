@@ -66,4 +66,14 @@ public class StudioController {
         log.info("studio id : " + studioId);
         return reviewService.createReview(studioId, user, files, requestDto);
     }
+
+    @Operation(summary = "리뷰 삭제 API")
+    @DeleteMapping("/{studioId}/review/{reviewId}")
+    public void deleteReview(
+            @PathVariable Long studioId,
+            @PathVariable Long reviewId,
+            @AuthenticationPrincipal User user){
+        log.info("review id : " + reviewId);
+        reviewService.deleteReview(user, studioId, reviewId);
+    }
 }

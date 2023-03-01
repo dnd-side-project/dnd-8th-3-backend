@@ -1,8 +1,9 @@
 package d83t.bpmbackend.domain.aggregate.studio.service;
 
 import d83t.bpmbackend.domain.aggregate.studio.dto.StudioCreateRequestDto;
-import d83t.bpmbackend.domain.aggregate.studio.dto.StudioDto;
+import d83t.bpmbackend.domain.aggregate.studio.dto.StudioResponseDto;
 
 public interface StudioService {
-    StudioDto createStudio(StudioCreateRequestDto requestDto);
+    StudioResponseDto createStudio(StudioCreateRequestDto requestDto);
+    StudioResponseDto findById(Long studioId);
 }

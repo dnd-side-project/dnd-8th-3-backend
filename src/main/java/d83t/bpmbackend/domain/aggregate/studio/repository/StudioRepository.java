@@ -8,6 +8,5 @@ import java.util.Optional;
 
 public interface StudioRepository extends JpaRepository<Studio, Long> {
     boolean existsStudioByNameAndLocation(String name, Location location);
-
     Optional<Studio> findByName(String name);
 }

@@ -20,13 +20,13 @@ public class Location {
     private String address;
 
     @Column(nullable = false)
-    private int latitude;
+    private double latitude;
 
     @Column(nullable = false)
-    private int longitude;
+    private double longitude;
 
     @Builder
-    public Location(String address, int latitude, int longitude) {
+    public Location(String address, double latitude, double longitude) {
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;

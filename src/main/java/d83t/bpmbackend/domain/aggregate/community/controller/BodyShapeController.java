@@ -36,4 +36,19 @@ public class BodyShapeController {
         List<BodyShapeResponse> bodyShapes = bodyShapeService.getBodyShapes(user, limit, offset);
         return BodyShapeResponse.MultiBodyShapes.builder().bodyShapeArticles(bodyShapes).bodyShapeCount(bodyShapes.size()).build();
     }
+
+    @GetMapping("/{bodyShapeId}")
+    public BodyShapeResponse.SingleBodyShape getBodyShape(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long bodyShapeId) {
+        return BodyShapeResponse.SingleBodyShape.builder().bodyShapeArticle(bodyShapeService.getBodyShape(user, bodyShapeId)).build();
+    }
+
+    @DeleteMapping("/{bodyShapeId}")
+    public void deleteBodyShape(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long bodyShapeId) {
+        bodyShapeService.deleteBodyShape(user, bodyShapeId);
+    }
+
 }

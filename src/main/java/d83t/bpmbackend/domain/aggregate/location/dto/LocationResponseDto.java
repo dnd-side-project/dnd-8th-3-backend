@@ -2,6 +2,7 @@ package d83t.bpmbackend.domain.aggregate.location.dto;
 
 import d83t.bpmbackend.domain.aggregate.location.entity.Location;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -9,9 +10,10 @@ import lombok.Getter;
 public class LocationResponseDto {
     private Long id;
     private String address;
-    private int latitude;
-    private int longitude;
+    private double latitude;
+    private double longitude;
 
+    @Builder
     public LocationResponseDto(Location location) {
         this.id = location.getId();
         this.address = location.getAddress();

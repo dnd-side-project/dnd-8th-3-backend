@@ -24,10 +24,10 @@ public class Studio extends DateEntity {
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
-    @Column(nullable = false)
+    @Column
     private String firstTag;
 
-    @Column(nullable = false)
+    @Column
     private String secondTag;
 
     // TODO: recommends 필드 추가
@@ -50,17 +50,17 @@ public class Studio extends DateEntity {
     @Column
     private String content;
 
-    @Column
+    @Column(columnDefinition = "double default 0.0")
     private double rating;
 
-    @Column(nullable = false, columnDefinition = "int default 0")
+    @Column(columnDefinition = "int default 0")
     private int reviewCount;
 
-    @Column(nullable = false, columnDefinition = "int default 0")
+    @Column(columnDefinition = "int default 0")
     private int scrapCount;
 
     @Builder
-    public Studio(String name, Location location, String firstTag, String secondTag, int phone, String sns, String openHours, String price) {
+    public Studio(String name, Location location, String firstTag, String secondTag, int phone, String sns, String openHours, String price, List<StudioImage> images, String content, double rating, int reviewCount, int scrapCount) {
         this.name = name;
         this.location = location;
         this.firstTag = firstTag;
@@ -69,6 +69,11 @@ public class Studio extends DateEntity {
         this.sns = sns;
         this.openHours = openHours;
         this.price = price;
+        this.images = images;
+        this.content = content;
+        this.rating = rating;
+        this.reviewCount = reviewCount;
+        this.scrapCount = scrapCount;
     }
 
     public void addStudioImage(StudioImage studioImage) {

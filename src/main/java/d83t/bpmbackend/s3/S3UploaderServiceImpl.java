@@ -21,7 +21,10 @@ public class S3UploaderServiceImpl implements S3UploaderService {
     @Value("${aws.s3.bucketName}")
     private String bucket;
 
-    public void putS3(MultipartFile uploadFile, String path, String fileName) {
+    @Value("${bpm.s3.bucket.base}")
+    private String basePath;
+
+    public String putS3(MultipartFile uploadFile, String path, String fileName) {
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(uploadFile.getContentType());
         metadata.setContentLength(uploadFile.getSize());
@@ -32,6 +35,8 @@ public class S3UploaderServiceImpl implements S3UploaderService {
         } catch (IOException e) {
             throw new CustomException(Error.S3_UPLOAD_FAIL);
         }
+        return basePath + fileName;
     }
+
 
 }

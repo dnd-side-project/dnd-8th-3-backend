@@ -36,8 +36,9 @@ public class UserController {
     @Operation(summary = "카카오 uuid 체크 API", description = "카카오 uid을 받아 이미 있는 유저인지 판단하는 API입니다.")
     @ApiResponse(responseCode = "200", description = "카카오 uuid가 조회되었습니다.", content = @Content(schema = @Schema(implementation = ProfileResponse.class)))
     @ApiResponse(responseCode = "404", description = "카카오 uuid를 찾지 못하였습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-    @GetMapping(path = "/verification")
+    @PostMapping(path = "/verification")
     public ProfileResponse verification(@RequestBody UserRequestDto userRequestDto) {
+        log.info("id:" + userRequestDto.getKakaoId());
         return userService.verification(userRequestDto);
     }
 }

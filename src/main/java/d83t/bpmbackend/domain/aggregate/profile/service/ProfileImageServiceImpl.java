@@ -48,13 +48,14 @@ public class ProfileImageServiceImpl implements ProfileImageService {
         String newName = FileUtils.createNewFileName(file.getOriginalFilename());
         String filePath = fileDir + newName;
         profileDto.setImageName(newName);
-        profileDto.setImagePath(filePath);
         if (env.equals("prod")) {
-            uploaderService.putS3(file, profilePath, newName);
+            String path = uploaderService.putS3(file, profilePath, newName);
+            profileDto.setImagePath(path);
         } else if (env.equals("local")) {
             try {
                 File localFile = new File(filePath);
                 file.transferTo(localFile);
+                profileDto.setImagePath(filePath);
                 FileUtils.removeNewFile(localFile);
             } catch (IOException e) {
                 e.printStackTrace();

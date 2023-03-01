@@ -10,8 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
     ProfileResponse signUp(ProfileRequest profileRequest, MultipartFile file);
-
     ScheduleResponse registerSchedule(User user, ScheduleDto scheduleDto);
-
     ProfileResponse verification(UserRequestDto userRequestDto);
 }

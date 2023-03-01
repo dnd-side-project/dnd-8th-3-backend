@@ -50,7 +50,7 @@ public class Studio extends DateEntity {
     @Column
     private String content;
 
-    @Column
+    @Column(nullable = false, columnDefinition = "double default 0.0")
     private double rating;
 
     @Column(nullable = false, columnDefinition = "int default 0")
@@ -60,7 +60,7 @@ public class Studio extends DateEntity {
     private int scrapCount;
 
     @Builder
-    public Studio(String name, Location location, String firstTag, String secondTag, int phone, String sns, String openHours, String price) {
+    public Studio(String name, Location location, String firstTag, String secondTag, int phone, String sns, String openHours, String price, String content) {
         this.name = name;
         this.location = location;
         this.firstTag = firstTag;
@@ -69,6 +69,7 @@ public class Studio extends DateEntity {
         this.sns = sns;
         this.openHours = openHours;
         this.price = price;
+        this.content = content;
     }
 
     public void addStudioImage(StudioImage studioImage) {

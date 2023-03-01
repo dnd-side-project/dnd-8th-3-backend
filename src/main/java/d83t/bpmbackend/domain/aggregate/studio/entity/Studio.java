@@ -1,8 +1,6 @@
 package d83t.bpmbackend.domain.aggregate.studio.entity;
 
 import d83t.bpmbackend.base.entity.DateEntity;
-import d83t.bpmbackend.domain.aggregate.location.entity.Location;
-import d83t.bpmbackend.domain.aggregate.profile.entity.Profile;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,9 +20,14 @@ public class Studio extends DateEntity {
     @Column(nullable = false)
     private String name;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "location_id")
-    private Location location;
+    @Column
+    private String address;
+
+    @Column
+    private double latitude;
+
+    @Column
+    private double longitude;
 
     @Column
     private String firstTag;
@@ -65,9 +68,11 @@ public class Studio extends DateEntity {
     private List<Review> reviews = new ArrayList<>();
 
     @Builder
-    public Studio(String name, Location location, String firstTag, String secondTag, int phone, String sns, String openHours, String price, List<StudioImage> images, String content, double rating, int reviewCount, int scrapCount) {
+    public Studio(String name, String address, double latitude, double longitude, String firstTag, String secondTag, int phone, String sns, String openHours, String price, List<StudioImage> images, String content, double rating, int reviewCount, int scrapCount) {
         this.name = name;
-        this.location = location;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.firstTag = firstTag;
         this.secondTag = secondTag;
         this.phone = phone;

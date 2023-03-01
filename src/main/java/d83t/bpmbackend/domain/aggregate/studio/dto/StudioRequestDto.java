@@ -11,17 +11,20 @@ import lombok.*;
 public class StudioRequestDto {
     @NotBlank(message = "스튜디오 이름은 필수입니다")
     private String name;
-    @NotNull
-    private Long locationId;
+    private String address;
+    private double latitude;
+    private double longitude;
     private int phone;
     private String sns;
     private String openHours;
     private String price;
 
     @Builder
-    public StudioRequestDto(String name, Long locationId, int phone, String sns, String openHours, String price) {
+    public StudioRequestDto(String name, String address, double latitude, double longitude, int phone, String sns, String openHours, String price) {
         this.name = name;
-        this.locationId = locationId;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.phone = phone;
         this.sns = sns;
         this.openHours = openHours;

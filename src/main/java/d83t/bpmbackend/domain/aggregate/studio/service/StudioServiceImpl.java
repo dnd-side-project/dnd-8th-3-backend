@@ -1,7 +1,5 @@
 package d83t.bpmbackend.domain.aggregate.studio.service;
 
-import d83t.bpmbackend.domain.aggregate.location.entity.Location;
-import d83t.bpmbackend.domain.aggregate.location.repository.LocationRepository;
 import d83t.bpmbackend.domain.aggregate.studio.dto.StudioRequestDto;
 import d83t.bpmbackend.domain.aggregate.studio.dto.StudioResponseDto;
 import d83t.bpmbackend.domain.aggregate.studio.entity.Studio;
@@ -19,22 +17,17 @@ import java.util.Optional;
 public class StudioServiceImpl implements StudioService {
 
     private final StudioRepository studioRepository;
-    private final LocationRepository locationRepository;
 
     @Override
     @Transactional
     public StudioResponseDto createStudio(StudioRequestDto requestDto) {
-        Location location = locationRepository.findById(requestDto.getLocationId())
-                .orElseThrow(() -> new CustomException(Error.NOT_FOUND_LOCATION));
-        if (studioRepository.existsByNameAndLocation(requestDto.getName(), location)) {
-            throw new CustomException(Error.STUDIO_ALREADY_EXISTS);
-        }
-
-        String[] address = location.getAddress().split(" ");
+        String[] address = requestDto.getAddress().split(" ");
 
         Studio studio = Studio.builder()
                 .name(requestDto.getName())
-                .location(location)
+                .address(requestDto.getAddress())
+                .latitude(requestDto.getLatitude())
+                .longitude(requestDto.getLongitude())
                 .firstTag(address[0])
                 .secondTag(address[1])
                 .phone(requestDto.getPhone())

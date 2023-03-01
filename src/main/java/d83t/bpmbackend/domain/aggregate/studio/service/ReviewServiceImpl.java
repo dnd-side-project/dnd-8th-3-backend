@@ -135,7 +135,7 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow(() -> new CustomException(Error.NOT_FOUND_REVIEW));
 
         studio.removeReview(review);
-        studioRepository.save(studio);
         reviewRepository.delete(review);
+        studioRepository.save(studio);
     }
 }

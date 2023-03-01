@@ -43,6 +43,9 @@ public class Review extends DateEntity {
     @Column(columnDefinition = "int default 0")
     private int likeCount;
 
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likes = new ArrayList<>();
+
     @Builder
     public Review(Studio studio, Profile author, double rating, List<ReviewImage> images, String content, int likeCount) {
         this.studio = studio;
@@ -62,5 +65,17 @@ public class Review extends DateEntity {
 
     public void setStudio(Studio studio) {
         this.studio = studio;
+    }
+
+    public void addLike(Like like, Profile user) {
+        this.likes.add(like);
+        this.likeCount += 1;
+        like.setReview(this);
+    }
+
+    public void removeLike(Like like) {
+        this.likes.remove(like);
+        this.likeCount -= 1;
+        like.setReview(null);
     }
 }

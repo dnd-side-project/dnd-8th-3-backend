@@ -4,6 +4,7 @@ import d83t.bpmbackend.domain.aggregate.studio.dto.ReviewRequestDto;
 import d83t.bpmbackend.domain.aggregate.studio.dto.ReviewResponseDto;
 import d83t.bpmbackend.domain.aggregate.studio.dto.StudioRequestDto;
 import d83t.bpmbackend.domain.aggregate.studio.dto.StudioResponseDto;
+import d83t.bpmbackend.domain.aggregate.studio.service.LikeService;
 import d83t.bpmbackend.domain.aggregate.studio.service.ReviewService;
 import d83t.bpmbackend.domain.aggregate.studio.service.StudioService;
 import d83t.bpmbackend.domain.aggregate.user.entity.User;
@@ -29,6 +30,7 @@ public class StudioController {
 
     private final StudioService studioService;
     private final ReviewService reviewService;
+    private final LikeService likeService;
 
     @Operation(summary = "스튜디오 등록 API", description = "스튜디오 필수, 추가 정보를 받아 등록")
     @ApiResponse(responseCode = "201", description = "스튜디오 등록 성공", content = @Content(schema = @Schema(implementation = StudioResponseDto.class)))
@@ -93,5 +95,23 @@ public class StudioController {
             @AuthenticationPrincipal User user){
         log.info("review id : " + reviewId);
         reviewService.deleteReview(user, studioId, reviewId);
+    }
+
+    @Operation(summary = "좋아요 등록 API", description = "리뷰에 대한 좋아요 등록하기")
+    @PostMapping("/{studioId}/review/{reviewId}/like")
+    public void createLike(
+            @PathVariable Long reviewId,
+            @AuthenticationPrincipal User user){
+        log.info("review id : " + reviewId);
+        likeService.createLike(user, reviewId);
+    }
+
+    @Operation(summary = "좋아요 삭제 API", description = "리뷰에 대한 좋아요 삭제하기")
+    @DeleteMapping("/{studioId}/review/{reviewId}/like")
+    public void deleteLike(
+            @PathVariable Long reviewId,
+            @AuthenticationPrincipal User user){
+        log.info("review id : " + reviewId);
+        likeService.deleteLike(user, reviewId);
     }
 }

@@ -7,6 +7,7 @@ import d83t.bpmbackend.domain.aggregate.studio.dto.ReviewResponseDto;
 import d83t.bpmbackend.domain.aggregate.studio.entity.Review;
 import d83t.bpmbackend.domain.aggregate.studio.entity.ReviewImage;
 import d83t.bpmbackend.domain.aggregate.studio.entity.Studio;
+import d83t.bpmbackend.domain.aggregate.studio.repository.LikeRepository;
 import d83t.bpmbackend.domain.aggregate.studio.repository.ReviewRepository;
 import d83t.bpmbackend.domain.aggregate.studio.repository.StudioRepository;
 import d83t.bpmbackend.domain.aggregate.user.entity.User;
@@ -40,7 +41,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final StudioRepository studioRepository;
     private final UserRepository userRepository;
-    private final ProfileRepository profileRepository;
+    private final LikeRepository likeRepository;
     private final S3UploaderService uploaderService;
 
     @Value("reviews/")
@@ -106,23 +107,41 @@ public class ReviewServiceImpl implements ReviewService {
         studio.addReview(review);
         studioRepository.save(studio);
 
-        return new ReviewResponseDto(review);
+        return new ReviewResponseDto(review, false);
     }
 
     @Override
-    public List<ReviewResponseDto> findAll(Long studioId, int page, int size, String sort) {
+    public List<ReviewResponseDto> findAll(User user, Long studioId, int page, int size, String sort) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort));
         Page<Review> reviews = reviewRepository.findByStudioId(studioId, pageable);
 
-        return reviews.stream().map(review -> new ReviewResponseDto(review))
-                .collect(Collectors.toList());
+        User findUser = userRepository.findByKakaoId(user.getKakaoId())
+                .orElseThrow(() -> new CustomException(Error.NOT_FOUND_USER_ID));
+        Profile profile = findUser.getProfile();
+
+        return reviews.stream().map(review -> {
+                    if (likeRepository.existsByReviewIdAndUserId(review.getId(), profile.getId())) {
+                        return new ReviewResponseDto(review, true);
+                    } else {
+                        return new ReviewResponseDto(review, false);
+                    }
+                }).collect(Collectors.toList());
     }
 
     @Override
-    public ReviewResponseDto findById(Long reviewId) {
+    public ReviewResponseDto findById(User user, Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new CustomException(Error.NOT_FOUND_REVIEW));
-        return new ReviewResponseDto(review);
+
+        User findUser = userRepository.findByKakaoId(user.getKakaoId())
+                .orElseThrow(() -> new CustomException(Error.NOT_FOUND_USER_ID));
+        Profile profile = findUser.getProfile();
+
+        boolean isLiked = false;
+        if (likeRepository.existsByReviewIdAndUserId(reviewId, profile.getId())) {
+            isLiked = true;
+        }
+        return new ReviewResponseDto(review, isLiked);
     }
 
     // TODO: 작성자인지 판단하는 검증 로직 추가
@@ -135,7 +154,7 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow(() -> new CustomException(Error.NOT_FOUND_REVIEW));
 
         studio.removeReview(review);
-        studioRepository.save(studio);
         reviewRepository.delete(review);
+        studioRepository.save(studio);
     }
 }

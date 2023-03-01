@@ -1,6 +1,8 @@
 package d83t.bpmbackend.domain.aggregate.profile.entity;
 
 import d83t.bpmbackend.domain.aggregate.community.entity.BodyShape;
+import d83t.bpmbackend.domain.aggregate.studio.entity.Like;
+import d83t.bpmbackend.domain.aggregate.studio.entity.Review;
 import d83t.bpmbackend.domain.aggregate.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -40,5 +42,11 @@ public class Profile {
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BodyShape> myBodyShapes;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likes;
 
 }

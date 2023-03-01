@@ -2,6 +2,7 @@ package d83t.bpmbackend.domain.aggregate.studio.entity;
 
 import d83t.bpmbackend.base.entity.DateEntity;
 import d83t.bpmbackend.domain.aggregate.location.entity.Location;
+import d83t.bpmbackend.domain.aggregate.profile.entity.Profile;
 import jakarta.persistence.*;
 import lombok.*;
 

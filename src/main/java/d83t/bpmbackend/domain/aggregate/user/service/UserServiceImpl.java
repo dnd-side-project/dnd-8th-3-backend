@@ -84,10 +84,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public ScheduleResponse registerSchedule(User user, ScheduleRequest scheduleRequest) {
         Optional<Studio> findStudio = studioRepository.findByName(scheduleRequest.getStudioName());
-        if (findStudio.isEmpty()) {
-            throw new CustomException(Error.NOT_FOUND_STUDIO);
+        Studio studio = null;
+        if (findStudio.isPresent()) {
+            studio = findStudio.get();
         }
-        Studio studio = findStudio.get();
 
         Schedule schedule = Schedule.builder()
                 .studio(studio)
@@ -97,6 +97,7 @@ public class UserServiceImpl implements UserService {
                 .memo(scheduleRequest.getMemo())
                 .build();
         scheduleRepository.save(schedule);
+
         return ScheduleResponse.builder()
                 .studioName(scheduleRequest.getStudioName())
                 .time(schedule.getTime())

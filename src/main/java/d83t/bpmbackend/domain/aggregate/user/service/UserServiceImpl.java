@@ -6,6 +6,7 @@ import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileResponse;
 import d83t.bpmbackend.domain.aggregate.profile.entity.Profile;
 import d83t.bpmbackend.domain.aggregate.profile.repository.ProfileRepository;
 import d83t.bpmbackend.domain.aggregate.profile.service.ProfileImageService;
+import d83t.bpmbackend.domain.aggregate.user.dto.UserRequestDto;
 import d83t.bpmbackend.domain.aggregate.user.entity.User;
 import d83t.bpmbackend.domain.aggregate.user.repository.UserRepository;
 import d83t.bpmbackend.exception.CustomException;
@@ -28,8 +29,8 @@ public class UserServiceImpl implements UserService {
     private final JwtService jwtService;
 
     @Override
-    public ProfileResponse signUp(Long kakaoId, ProfileRequest profileRequest, MultipartFile file) {
-        Optional<User> findUser = userRepository.findByKakaoId(kakaoId);
+    public ProfileResponse signUp(ProfileRequest profileRequest, MultipartFile file) {
+        Optional<User> findUser = userRepository.findByKakaoId(profileRequest.getKakaoId());
         if(findUser.isPresent()){
             throw new CustomException(Error.USER_ALREADY_EXITS);
         }
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
         Profile profile = profileImageService.convertProfileDto(profileDto);
         User user = User.builder()
-                .kakaoId(kakaoId)
+                .kakaoId(profileRequest.getKakaoId())
                 .profile(profile)
                 .build();
         userRepository.save(user);
@@ -54,15 +55,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ProfileResponse verification(Long kakaoId) {
-        Optional<User> user = Optional.ofNullable(userRepository.findByKakaoId(kakaoId).orElseThrow(
+    public ProfileResponse verification(UserRequestDto userRequestDto) {
+        Optional<User> user = Optional.ofNullable(userRepository.findByKakaoId(userRequestDto.getKakaoId()).orElseThrow(
                 () -> new CustomException(Error.NOT_FOUND_USER_ID))
         );
         Profile userProfile = user.get().getProfile();
         return ProfileResponse.builder()
                 .nickname(userProfile.getNickName())
                 .bio(userProfile.getBio())
-                .token("secret")
+                .token(jwtService.createToken(userProfile.getNickName()))
                 .build();
     }
 }

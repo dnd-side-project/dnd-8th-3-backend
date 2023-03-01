@@ -1,9 +1,11 @@
 package d83t.bpmbackend.domain.aggregate.studio.dto;
 
+import d83t.bpmbackend.domain.aggregate.location.dto.LocationResponseDto;
 import d83t.bpmbackend.domain.aggregate.location.entity.Location;
 import d83t.bpmbackend.domain.aggregate.studio.entity.Studio;
 import d83t.bpmbackend.domain.aggregate.studio.entity.StudioImage;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
@@ -12,10 +14,10 @@ import java.util.List;
 
 @Getter
 @Schema(description = "스튜디오 응답 DTO")
-public class StudioDto {
+public class StudioResponseDto {
     private Long id;
     private String name;
-    private Location location;
+    private LocationResponseDto location;
     private String firstTag;
     private String secondTag;
     private int phone;
@@ -30,10 +32,13 @@ public class StudioDto {
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
 
-    public StudioDto(Studio studio) {
+    @Builder
+    public StudioResponseDto(Studio studio) {
         this.id = studio.getId();
         this.name = studio.getName();
-        this.location = studio.getLocation();
+
+        this.location = new LocationResponseDto(studio.getLocation());
+
         this.firstTag = studio.getFirstTag();
         this.secondTag = studio.getSecondTag();
         this.phone = studio.getPhone();

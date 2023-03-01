@@ -5,13 +5,13 @@ import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileResponse;
 import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleDto;
 import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleResponse;
 import d83t.bpmbackend.domain.aggregate.user.entity.User;
+import d83t.bpmbackend.domain.aggregate.user.dto.UserRequestDto;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
-    ProfileResponse signUp(Long kakaoId, ProfileRequest profileRequest, MultipartFile file);
-
-    ProfileResponse verification(Long kakaoId);
+    ProfileResponse signUp(ProfileRequest profileRequest, MultipartFile file);
 
     ScheduleResponse registerSchedule(User user, ScheduleDto scheduleDto);
 
+    ProfileResponse verification(UserRequestDto userRequestDto);
 }

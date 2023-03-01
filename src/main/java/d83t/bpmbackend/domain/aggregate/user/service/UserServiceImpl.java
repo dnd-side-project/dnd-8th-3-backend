@@ -10,6 +10,7 @@ import d83t.bpmbackend.domain.aggregate.studio.entity.Studio;
 import d83t.bpmbackend.domain.aggregate.studio.repository.StudioRepository;
 import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleDto;
 import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleResponse;
+import d83t.bpmbackend.domain.aggregate.user.dto.UserRequestDto;
 import d83t.bpmbackend.domain.aggregate.user.entity.Schedule;
 import d83t.bpmbackend.domain.aggregate.user.entity.User;
 import d83t.bpmbackend.domain.aggregate.user.repository.ScheduleRepository;
@@ -39,9 +40,9 @@ public class UserServiceImpl implements UserService {
     private final JwtService jwtService;
 
     @Override
-    public ProfileResponse signUp(Long kakaoId, ProfileRequest profileRequest, MultipartFile file) {
-        Optional<User> findUser = userRepository.findByKakaoId(kakaoId);
-        if (findUser.isPresent()) {
+    public ProfileResponse signUp(ProfileRequest profileRequest, MultipartFile file) {
+        Optional<User> findUser = userRepository.findByKakaoId(profileRequest.getKakaoId());
+        if(findUser.isPresent()){
             throw new CustomException(Error.USER_ALREADY_EXITS);
         }
         //닉네임 중복여부
@@ -52,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
         Profile profile = profileImageService.convertProfileDto(profileDto);
         User user = User.builder()
-                .kakaoId(kakaoId)
+                .kakaoId(profileRequest.getKakaoId())
                 .profile(profile)
                 .build();
         userRepository.save(user);
@@ -65,17 +66,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ProfileResponse verification(Long kakaoId) {
-        Optional<User> user = Optional.ofNullable(userRepository.findByKakaoId(kakaoId).orElseThrow(
+    public ProfileResponse verification(UserRequestDto userRequestDto) {
+        Optional<User> user = Optional.ofNullable(userRepository.findByKakaoId(userRequestDto.getKakaoId()).orElseThrow(
                 () -> new CustomException(Error.NOT_FOUND_USER_ID))
         );
         Profile userProfile = user.get().getProfile();
         return ProfileResponse.builder()
                 .nickname(userProfile.getNickName())
                 .bio(userProfile.getBio())
-                .token("secret")
+                .token(jwtService.createToken(userProfile.getNickName()))
+                .image(userProfile.getStoragePathName())
                 .build();
     }
+
 
     @Override
     public ScheduleResponse registerSchedule(User user, ScheduleDto scheduleDto) {

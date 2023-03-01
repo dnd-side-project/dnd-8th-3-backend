@@ -11,6 +11,7 @@ public enum Error {
     S3_UPLOAD_FAIL("upload fail", HttpStatus.INTERNAL_SERVER_ERROR),
     S3_GET_FILE_FAIL("fail to get file", HttpStatus.INTERNAL_SERVER_ERROR),
     DUPLICATE_USER_NICK_NAME("duplicate user nickname", HttpStatus.CONFLICT),
+    NOT_FOUND_BODY_SHAPE("bodyshape article not found",HttpStatus.NOT_FOUND),
     FILE_SIZE_MAX("a Maximum of 5 files can Come in", HttpStatus.BAD_REQUEST),
     NOT_FOUND_LOCATION("location not found", HttpStatus.NOT_FOUND),
     NOT_FOUND_STUDIO("studio not found", HttpStatus.NOT_FOUND),

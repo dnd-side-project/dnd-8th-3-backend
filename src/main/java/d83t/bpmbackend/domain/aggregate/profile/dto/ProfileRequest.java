@@ -3,7 +3,6 @@ package d83t.bpmbackend.domain.aggregate.profile.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Builder
@@ -24,7 +23,4 @@ public class ProfileRequest {
     @Schema(description = "사용자가 등록한 한줄 소개", defaultValue = "한줄 소개 입니다.")
     private String bio;
 
-    @Schema(description = "사용자가 등록한 프로필 이미지", defaultValue = "test.jpg")
-    @NotBlank
-    private MultipartFile file;
 }

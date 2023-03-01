@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     private final JwtService jwtService;
 
     @Override
-    public ProfileResponse signUp(ProfileRequest profileRequest) {
+    public ProfileResponse signUp(ProfileRequest profileRequest, MultipartFile file) {
         Optional<User> findUser = userRepository.findByKakaoId(profileRequest.getKakaoId());
         if(findUser.isPresent()){
             throw new CustomException(Error.USER_ALREADY_EXITS);
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
         if(profileRepository.findByNickName(profileRequest.getNickname()).isPresent()){
             throw new CustomException(Error.USER_NICKNAME_ALREADY_EXITS);
         }
-        ProfileDto profileDto = profileImageService.setUploadFile(profileRequest, profileRequest.getFile());
+        ProfileDto profileDto = profileImageService.setUploadFile(profileRequest, file);
 
         Profile profile = profileImageService.convertProfileDto(profileDto);
         User user = User.builder()

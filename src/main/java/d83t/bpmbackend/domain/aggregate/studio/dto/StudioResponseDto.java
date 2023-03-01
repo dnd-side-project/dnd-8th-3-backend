@@ -1,7 +1,5 @@
 package d83t.bpmbackend.domain.aggregate.studio.dto;
 
-import d83t.bpmbackend.domain.aggregate.location.dto.LocationResponseDto;
-import d83t.bpmbackend.domain.aggregate.location.entity.Location;
 import d83t.bpmbackend.domain.aggregate.studio.entity.Studio;
 import d83t.bpmbackend.domain.aggregate.studio.entity.StudioImage;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,7 +15,9 @@ import java.util.List;
 public class StudioResponseDto {
     private Long id;
     private String name;
-    private LocationResponseDto location;
+    private String address;
+    private double latitude;
+    private double longitude;
     private String firstTag;
     private String secondTag;
     private int phone;
@@ -36,9 +36,9 @@ public class StudioResponseDto {
     public StudioResponseDto(Studio studio) {
         this.id = studio.getId();
         this.name = studio.getName();
-
-        this.location = new LocationResponseDto(studio.getLocation());
-
+        this.address = studio.getAddress();
+        this.latitude = studio.getLatitude();
+        this.longitude = studio.getLongitude();
         this.firstTag = studio.getFirstTag();
         this.secondTag = studio.getSecondTag();
         this.phone = studio.getPhone();

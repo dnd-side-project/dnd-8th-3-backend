@@ -21,7 +21,7 @@ public class Studio extends DateEntity {
     private String name;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "location_id", nullable = false)
+    @JoinColumn(name = "location_id")
     private Location location;
 
     @Column
@@ -59,6 +59,9 @@ public class Studio extends DateEntity {
     @Column(columnDefinition = "int default 0")
     private int scrapCount;
 
+    @OneToMany(mappedBy = "studio", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
+
     @Builder
     public Studio(String name, Location location, String firstTag, String secondTag, int phone, String sns, String openHours, String price, List<StudioImage> images, String content, double rating, int reviewCount, int scrapCount) {
         this.name = name;
@@ -81,5 +84,25 @@ public class Studio extends DateEntity {
             this.images = new ArrayList<>();
         }
         this.images.add(studioImage);
+    }
+
+    public void addReview(Review review) {
+        this.reviews.add(review);
+        if (review.getRating() != 0.0) {
+            double avg = ((this.rating * reviewCount) + review.getRating()) / (reviewCount + 1);
+            this.rating = avg;
+        }
+        this.reviewCount += 1;
+        review.setStudio(this);
+    }
+
+    public void removeReview(Review review) {
+        this.reviews.remove(review);
+        if (review.getRating() != 0.0) {
+            double avg = ((this.rating * reviewCount) - review.getRating()) / (reviewCount - 1);
+            this.rating = avg;
+        }
+        this.reviewCount -= 1;
+        review.setStudio(null);
     }
 }

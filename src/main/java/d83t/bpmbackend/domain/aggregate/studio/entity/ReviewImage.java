@@ -2,19 +2,22 @@ package d83t.bpmbackend.domain.aggregate.studio.entity;
 
 import d83t.bpmbackend.base.entity.DateEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StudioImage extends DateEntity {
+public class ReviewImage extends DateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Studio studio;
+    private Review review;
 
     @Column(name = "filename", nullable = false)
     private String originFileName;
@@ -23,7 +26,8 @@ public class StudioImage extends DateEntity {
     private String storagePathName;
 
     @Builder
-    public StudioImage(String originFileName, String storagePathName) {
+    public ReviewImage(Review review, String originFileName, String storagePathName) {
+        this.review = review;
         this.originFileName = originFileName;
         this.storagePathName = storagePathName;
     }

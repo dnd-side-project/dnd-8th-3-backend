@@ -24,6 +24,7 @@ public class LocationServiceImpl implements LocationService {
     public LocationResponseDto createLocation(LocationRequestDto requestDto) {
         Location location = locationRepository.findByLatitudeAndLongitude(requestDto.getLatitude(), requestDto.getLongitude())
                 .orElseGet(() -> locationRepository.save(requestDto.toEntity()));
+        locationRepository.save(location);
 
         return new LocationResponseDto(location);
     }

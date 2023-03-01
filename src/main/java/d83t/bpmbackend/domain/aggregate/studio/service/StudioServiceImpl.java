@@ -1,9 +1,8 @@
 package d83t.bpmbackend.domain.aggregate.studio.service;
 
-import d83t.bpmbackend.domain.aggregate.location.dto.LocationResponseDto;
 import d83t.bpmbackend.domain.aggregate.location.entity.Location;
 import d83t.bpmbackend.domain.aggregate.location.repository.LocationRepository;
-import d83t.bpmbackend.domain.aggregate.studio.dto.StudioCreateRequestDto;
+import d83t.bpmbackend.domain.aggregate.studio.dto.StudioRequestDto;
 import d83t.bpmbackend.domain.aggregate.studio.dto.StudioResponseDto;
 import d83t.bpmbackend.domain.aggregate.studio.entity.Studio;
 import d83t.bpmbackend.domain.aggregate.studio.repository.StudioRepository;
@@ -24,7 +23,7 @@ public class StudioServiceImpl implements StudioService {
 
     @Override
     @Transactional
-    public StudioResponseDto createStudio(StudioCreateRequestDto requestDto) {
+    public StudioResponseDto createStudio(StudioRequestDto requestDto) {
         Location location = locationRepository.findById(requestDto.getLocationId())
                 .orElseThrow(() -> new CustomException(Error.NOT_FOUND_LOCATION));
         if (studioRepository.existsStudioByNameAndLocation(requestDto.getName(), location)) {
@@ -43,6 +42,7 @@ public class StudioServiceImpl implements StudioService {
                 .openHours(requestDto.getOpenHours())
                 .price(requestDto.getPrice())
                 .build();
+        studioRepository.save(studio);
 
         return new StudioResponseDto(studio);
     }

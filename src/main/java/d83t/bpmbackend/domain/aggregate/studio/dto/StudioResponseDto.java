@@ -47,8 +47,8 @@ public class StudioResponseDto {
         this.price = studio.getPrice();
 
         List<String> filePaths = new ArrayList<>();
-        for (StudioImage images : studio.getImages()) {
-            filePaths.add(images.getStoragePathName());
+        for (StudioImage image : studio.getImages()) {
+            filePaths.add(image.getStoragePathName());
         }
         this.filesPath = filePaths;
 

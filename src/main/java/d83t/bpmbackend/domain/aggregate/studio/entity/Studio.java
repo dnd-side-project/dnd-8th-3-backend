@@ -50,7 +50,7 @@ public class Studio extends DateEntity {
     @Column
     private String content;
 
-    @Column(columnDefinition = "double default 0.0")
+    @Column
     private double rating;
 
     @Column(columnDefinition = "int default 0")
@@ -58,6 +58,9 @@ public class Studio extends DateEntity {
 
     @Column(columnDefinition = "int default 0")
     private int scrapCount;
+
+    @OneToMany(mappedBy = "studio", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
 
     @Builder
     public Studio(String name, Location location, String firstTag, String secondTag, int phone, String sns, String openHours, String price, List<StudioImage> images, String content, double rating, int reviewCount, int scrapCount) {
@@ -81,5 +84,17 @@ public class Studio extends DateEntity {
             this.images = new ArrayList<>();
         }
         this.images.add(studioImage);
+    }
+
+    public void addReview(Review review) {
+        this.reviews.add(review);
+        this.reviewCount += 1;
+        review.setStudio(this);
+    }
+
+    public void removeReview(Review review) {
+        this.reviews.remove(review);
+        this.reviewCount -= 1;
+        review.setStudio(null);
     }
 }

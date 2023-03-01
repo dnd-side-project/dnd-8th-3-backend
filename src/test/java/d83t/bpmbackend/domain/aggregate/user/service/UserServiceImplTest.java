@@ -2,12 +2,11 @@ package d83t.bpmbackend.domain.aggregate.user.service;
 
 import d83t.bpmbackend.domain.aggregate.studio.entity.Studio;
 import d83t.bpmbackend.domain.aggregate.studio.repository.StudioRepository;
-import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleDto;
+import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleRequest;
 import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleResponse;
 import d83t.bpmbackend.domain.aggregate.user.entity.Schedule;
 import d83t.bpmbackend.domain.aggregate.user.entity.User;
 import d83t.bpmbackend.domain.aggregate.user.repository.ScheduleRepository;
-import d83t.bpmbackend.domain.aggregate.user.repository.UserRepository;
 import d83t.bpmbackend.security.jwt.JwtService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,8 +17,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -58,7 +55,7 @@ class UserServiceImplTest {
 
     @Test
     void 스케줄등록하기() {
-        ScheduleDto scheduleDto = ScheduleDto.builder()
+        ScheduleRequest scheduleRequest = ScheduleRequest.builder()
                 .date("2022-01-01")
                 .time("17:54:32")
                 .memo("메모입니다.")
@@ -75,6 +72,6 @@ class UserServiceImplTest {
 
         Mockito.when(scheduleRepository.save(Mockito.any(Schedule.class))).thenReturn(null);
 
-        userService.registerSchedule(user, scheduleDto);
+        userService.registerSchedule(user, scheduleRequest);
     }
 }

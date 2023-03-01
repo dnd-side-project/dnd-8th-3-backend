@@ -11,7 +11,7 @@ import lombok.*;
 @Schema(description = "카카오 유저 확인API 요청 DTO")
 public class UserRequestDto {
 
-    @Schema(description = "kakao uid", defaultValue = "9873721L")
+    @Schema(description = "kakao uid", defaultValue = "9873721")
     @NotBlank
     private Long kakaoId;
 }

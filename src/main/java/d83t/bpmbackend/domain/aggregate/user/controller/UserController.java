@@ -27,9 +27,10 @@ public class UserController {
     @ApiResponse(responseCode = "409", description = "이미 존재하는 유저입니다. 닉네임이나 카카오 uid확인 필요", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     @PostMapping(path = "/signup")
     public ProfileResponse signUp(
-            @ModelAttribute ProfileRequest profileRequest) {
-        log.info(profileRequest.getKakaoId() +" " + profileRequest.getNickname() + " " +  profileRequest.getBio() + " " +profileRequest.getFile().getOriginalFilename());
-        return userService.signUp(profileRequest);
+            @ModelAttribute ProfileRequest profileRequest,
+            @RequestParam MultipartFile file) {
+        log.info(profileRequest.getKakaoId() +" " + profileRequest.getNickname() + " " +  profileRequest.getBio() + " " +file.getOriginalFilename());
+        return userService.signUp(profileRequest, file);
     }
 
     @Operation(summary = "카카오 uuid 체크 API", description = "카카오 uid을 받아 이미 있는 유저인지 판단하는 API입니다.")

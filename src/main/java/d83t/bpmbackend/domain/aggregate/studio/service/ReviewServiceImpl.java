@@ -104,6 +104,13 @@ public class ReviewServiceImpl implements ReviewService {
         return new ReviewResponseDto(review);
     }
 
+    @Override
+    public ReviewResponseDto findById(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new CustomException(Error.NOT_FOUND_REVIEW));
+        return new ReviewResponseDto(review);
+    }
+
     // TODO: 작성자인지 판단하는 검증 로직 추가
     @Override
     @Transactional

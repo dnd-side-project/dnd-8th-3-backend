@@ -144,4 +144,42 @@ public class BodyShapeServiceImpl implements BodyShapeService {
         }).collect(Collectors.toList());
     }
 
+    //TODO: 향후 public, private 구분이 되는 기능이 추가될 시 Response를 바꿔야함.
+    @Override
+    public BodyShapeResponse getBodyShape(User user, Long bodyShapeId) {
+        Optional<BodyShape> findBodyShape = bodyShapeRepository.findById(bodyShapeId);
+        if(findBodyShape.isEmpty()){
+            throw new CustomException(Error.NOT_FOUND_BODY_SHAPE);
+        }
+        BodyShape bodyShape = findBodyShape.get();
+        List<String> filePaths = new ArrayList<>();
+        Profile author = bodyShape.getAuthor();
+        List<BodyShapeImage> images = bodyShape.getImages();
+        for(BodyShapeImage image : images){
+            filePaths.add(image.getStoragePathName());
+        }
+        return BodyShapeResponse.builder()
+                .id(bodyShape.getId())
+                .createdAt(bodyShape.getCreatedDate())
+                .author(BodyShapeResponse.Author.builder()
+                        .nickname(author.getNickName())
+                        .profilePath(author.getStoragePathName())
+                        .build())
+                .updatedAt(bodyShape.getModifiedDate())
+                .filesPath(filePaths)
+                .content(bodyShape.getContent())
+                .build();
+    }
+
+    //TODO: 마찬가지로 향후 public이 생길시 작성 유저인지 판단하는 로직 추가
+    @Override
+    public void deleteBodyShape(User user, Long bodyShapeId) {
+        Optional<BodyShape> findBodyShape = bodyShapeRepository.findById(bodyShapeId);
+        if(findBodyShape.isEmpty()){
+            throw new CustomException(Error.NOT_FOUND_BODY_SHAPE);
+        }
+        BodyShape bodyShape = findBodyShape.get();
+        bodyShapeRepository.delete(bodyShape);
+    }
+
 }

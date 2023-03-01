@@ -39,7 +39,7 @@ public class ReviewResponseDto {
         Studio studio = review.getStudio();
         this.studio = new StudioDto(studio.getId(), studio.getName(), studio.getRating(), studio.getContent());
         Profile profile = review.getAuthor();
-        this.author = new AuthorDto(profile.getNickName(), profile.getStoragePathName());
+        this.author = new AuthorDto(profile.getId(), profile.getNickName(), profile.getStoragePathName());
 
         List<String> filePaths = new ArrayList<>();
         for (ReviewImage image : review.getImages()) {
@@ -60,8 +60,8 @@ public class ReviewResponseDto {
     @Builder
     @Getter
     public static class AuthorDto {
+        private Long id;
         private String nickname;
         private String profilePath;
     }
-
 }

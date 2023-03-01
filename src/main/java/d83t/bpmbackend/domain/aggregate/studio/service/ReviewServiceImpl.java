@@ -18,6 +18,10 @@ import d83t.bpmbackend.utils.FileUtils;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -101,6 +106,22 @@ public class ReviewServiceImpl implements ReviewService {
         studio.addReview(review);
         studioRepository.save(studio);
 
+        return new ReviewResponseDto(review);
+    }
+
+    @Override
+    public List<ReviewResponseDto> findAll(Long studioId, int page, int size, String sort) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort));
+        Page<Review> reviews = reviewRepository.findByStudioId(studioId, pageable);
+
+        return reviews.stream().map(review -> new ReviewResponseDto(review))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ReviewResponseDto findById(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new CustomException(Error.NOT_FOUND_REVIEW));
         return new ReviewResponseDto(review);
     }
 

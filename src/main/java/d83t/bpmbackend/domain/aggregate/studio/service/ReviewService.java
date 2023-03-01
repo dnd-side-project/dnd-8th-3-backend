@@ -9,5 +9,7 @@ import java.util.List;
 
 public interface ReviewService {
     ReviewResponseDto createReview(Long studioId, User user, List<MultipartFile> files, ReviewRequestDto requestDto);
+    List<ReviewResponseDto> findAll(Long studioId, int page, int size, String sort);
+    ReviewResponseDto findById(Long reviewId);
     void deleteReview(User user, Long studioId, Long reviewId);
 }

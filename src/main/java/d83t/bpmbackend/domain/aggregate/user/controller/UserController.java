@@ -46,12 +46,19 @@ public class UserController {
         return userService.verification(userRequestDto);
     }
 
+    @Operation(summary = "내 일정 조회 API", description = "사용자가 일정을 등록했는지 확인합니다. token을 넘겨야합니다.")
+    @ApiResponse(responseCode = "200", description = "내 일정 조회 성공", content = @Content(schema = @Schema(implementation = ScheduleResponse.class)))
+    @ApiResponse(responseCode = "404", description = "등록된 일정이 없습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     @GetMapping("/schedule")
     public ScheduleResponse getSchedule(@AuthenticationPrincipal User user){
         log.info("request user : " + user.getKakaoId());
         return userService.getSchedule(user);
     }
 
+
+    @Operation(summary = "내 일정 등록 API", description = "사용자가 일정을 등록합니다. token을 넘겨야합니다.")
+    @ApiResponse(responseCode = "200", description = "내 일정 등록 성공", content = @Content(schema = @Schema(implementation = ScheduleResponse.class)))
+    @ApiResponse(responseCode = "404", description = "스튜디오 이름이 잘못 들어왔습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     @PostMapping("/schedule")
     public ScheduleResponse registerSchedule(@AuthenticationPrincipal User user, @RequestBody ScheduleDto scheduleDto){
         log.info("request : "+ scheduleDto.toString());

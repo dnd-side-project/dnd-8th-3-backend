@@ -79,7 +79,11 @@ class ScheduleRepositoryTest {
         scheduleRepository.save(schedule);
 
         Optional<Schedule> findUser = scheduleRepository.findByUserId(user.getId());
-        System.out.println(findUser.get().getId());
+        Assertions.assertThat(findUser.get().getMemo()).isEqualTo(schedule.getMemo());
+        Assertions.assertThat(findUser.get().getDate()).isEqualTo(schedule.getDate());
+        Assertions.assertThat(findUser.get().getTime()).isEqualTo(schedule.getTime());
+        Assertions.assertThat(findUser.get().getUser()).isEqualTo(schedule.getUser());
+        Assertions.assertThat(findUser.get().getStudio()).isEqualTo(schedule.getStudio());
 
     }
 

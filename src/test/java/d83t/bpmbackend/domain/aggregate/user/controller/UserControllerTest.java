@@ -5,11 +5,11 @@ import d83t.bpmbackend.config.WithAuthUser;
 import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileResponse;
 import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleDto;
 import d83t.bpmbackend.domain.aggregate.user.dto.ScheduleResponse;
+import d83t.bpmbackend.domain.aggregate.user.dto.UserRequestDto;
 import d83t.bpmbackend.domain.aggregate.user.entity.User;
 import d83t.bpmbackend.domain.aggregate.user.service.UserServiceImpl;
 import d83t.bpmbackend.exception.CustomException;
 import d83t.bpmbackend.exception.Error;
-import d83t.bpmbackend.security.WebConfig;
 import d83t.bpmbackend.security.jwt.JwtService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -20,10 +20,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -52,27 +50,36 @@ class UserControllerTest {
     @Test
     void 카카오_ID_검증_성공() throws Exception {
         Random random = new Random();
-        Long kakaoId = random.nextLong();
+        UserRequestDto userRequestDto = UserRequestDto.builder()
+                .kakaoId(random.nextLong())
+                .build();
         ProfileResponse profileResponse = ProfileResponse.builder()
                 .nickname("nickname")
                 .bio("bio")
                 .build();
-        Mockito.when(userService.verification(Mockito.eq(kakaoId))).thenReturn(profileResponse);
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/" + kakaoId + "/verification"))
+
+        Mockito.when(userService.verification(Mockito.any(userRequestDto.getClass()))).thenReturn(profileResponse);
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/users/verification")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userRequestDto)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.profile.nickname", Matchers.equalTo(profileResponse.getNickname())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.profile.bio", Matchers.equalTo(profileResponse.getBio())));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.nickname", Matchers.equalTo(profileResponse.getNickname())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.bio", Matchers.equalTo(profileResponse.getBio())));
     }
 
     @Test
     void 카카오_ID_검증_실패() throws Exception {
         Random random = new Random();
-        Long kakaoId = random.nextLong();
+        UserRequestDto userRequestDto = UserRequestDto.builder()
+                .kakaoId(random.nextLong())
+                .build();
 
-        Mockito.when(userService.verification(Mockito.any(Long.class))).thenThrow(new CustomException(Error.NOT_FOUND_USER_ID));
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/" + kakaoId + "/verification"))
+        Mockito.when(userService.verification(Mockito.any(userRequestDto.getClass()))).thenThrow(new CustomException(Error.NOT_FOUND_USER_ID));
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/users/verification")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userRequestDto)))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.errors.message", Matchers.equalTo(Error.NOT_FOUND_USER_ID.getMessage())));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.equalTo(Error.NOT_FOUND_USER_ID.getMessage())));
     }
 
     @Test

@@ -26,7 +26,7 @@ public class StudioServiceImpl implements StudioService {
     public StudioResponseDto createStudio(StudioRequestDto requestDto) {
         Location location = locationRepository.findById(requestDto.getLocationId())
                 .orElseThrow(() -> new CustomException(Error.NOT_FOUND_LOCATION));
-        if (studioRepository.existsStudioByNameAndLocation(requestDto.getName(), location)) {
+        if (studioRepository.existsByNameAndLocation(requestDto.getName(), location)) {
             throw new CustomException(Error.STUDIO_ALREADY_EXISTS);
         }
 

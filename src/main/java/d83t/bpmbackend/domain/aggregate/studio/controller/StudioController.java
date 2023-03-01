@@ -75,16 +75,19 @@ public class StudioController {
             @PathVariable Long studioId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
-            @RequestParam(defaultValue = "createdDate") String sort){
+            @RequestParam(defaultValue = "createdDate") String sort,
+            @AuthenticationPrincipal User user){
         log.info("page : " + page + " / size : " + size + " / sort : " + sort);
-        return reviewService.findAll(studioId, page, size, sort);
+        return reviewService.findAll(user, studioId, page, size, sort);
     }
 
     @Operation(summary = "리뷰 상세 조회 API")
     @GetMapping("/{studioId}/review/{reviewId}")
-    public ReviewResponseDto findReviewDetail(@PathVariable Long reviewId) {
+    public ReviewResponseDto findReviewDetail(
+            @PathVariable Long reviewId,
+            @AuthenticationPrincipal User user) {
         log.info("review id : " + reviewId);
-        return reviewService.findById(reviewId);
+        return reviewService.findById(user, reviewId);
     }
 
     @Operation(summary = "리뷰 삭제 API")

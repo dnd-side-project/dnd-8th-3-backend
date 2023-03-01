@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface StudioRepository extends JpaRepository<Studio, Long> {
-    boolean existsStudioByNameAndLocation(String name, Location location);
+    boolean existsByNameAndLocation(String name, Location location);
     Optional<Studio> findByName(String name);
 }

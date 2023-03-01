@@ -23,16 +23,19 @@ public class ReviewResponseDto {
     private List<String> filesPath;
     private String content;
     private int likeCount;
+
+    private boolean isLiked;
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
 
 
     @Builder
-    public ReviewResponseDto(Review review) {
+    public ReviewResponseDto(Review review, boolean isLiked) {
         this.id = review.getId();
         this.rating = review.getRating();
         this.content = review.getContent();
         this.likeCount = review.getLikeCount();
+        this.isLiked = isLiked;
         this.createdAt = review.getCreatedDate();
         this.updatedAt = review.getModifiedDate();
 

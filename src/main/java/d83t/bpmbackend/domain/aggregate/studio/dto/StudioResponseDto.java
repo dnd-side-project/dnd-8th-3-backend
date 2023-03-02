@@ -21,7 +21,7 @@ public class StudioResponseDto {
     private double longitude;
     private String firstTag;
     private String secondTag;
-    private int phone;
+    private String phone;
     private String sns;
     private String openHours;
     private String price;

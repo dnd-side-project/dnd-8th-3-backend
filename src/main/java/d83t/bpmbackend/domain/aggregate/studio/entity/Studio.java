@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Getter
@@ -35,10 +36,10 @@ public class Studio extends DateEntity {
     @Column
     private String secondTag;
 
-    // TODO: recommends 필드 추가
+    // TODO: recommends 추가
 
     @Column
-    private int phone;
+    private String phone;
 
     @Column
     private String sns;
@@ -68,7 +69,7 @@ public class Studio extends DateEntity {
     private List<Review> reviews = new ArrayList<>();
 
     @Builder
-    public Studio(String name, String address, double latitude, double longitude, String firstTag, String secondTag, int phone, String sns, String openHours, String price, List<StudioImage> images, String content, double rating, int reviewCount, int scrapCount) {
+    public Studio(String name, String address, double latitude, double longitude, String firstTag, String secondTag, String phone, String sns, String openHours, String price, List<StudioImage> images, String content, double rating, int reviewCount, int scrapCount) {
         this.name = name;
         this.address = address;
         this.latitude = latitude;

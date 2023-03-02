@@ -14,13 +14,13 @@ public class StudioRequestDto {
     private String address;
     private double latitude;
     private double longitude;
-    private int phone;
+    private String phone;
     private String sns;
     private String openHours;
     private String price;
 
     @Builder
-    public StudioRequestDto(String name, String address, double latitude, double longitude, int phone, String sns, String openHours, String price) {
+    public StudioRequestDto(String name, String address, double latitude, double longitude, String phone, String sns, String openHours, String price) {
         this.name = name;
         this.address = address;
         this.latitude = latitude;

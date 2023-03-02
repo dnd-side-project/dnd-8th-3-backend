@@ -9,6 +9,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +22,7 @@ import java.util.Date;
 @Service
 @Getter
 @AllArgsConstructor
+@Slf4j
 public class JwtService {
 
     private final JwtConfig jwtConfig;
@@ -66,6 +68,7 @@ public class JwtService {
     }
 
     public Authentication getAuthentication(String jwtToken) {
+        log.info("token user nickname: " + getNickname(jwtToken));
         UserDetails userDetails = userServiceDetail.loadUserByUsername(getNickname(jwtToken));
         User user = (User)userDetails;
         return new UsernamePasswordAuthenticationToken(user, "", userDetails.getAuthorities());

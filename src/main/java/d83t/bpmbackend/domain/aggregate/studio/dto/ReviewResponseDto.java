@@ -20,6 +20,7 @@ public class ReviewResponseDto {
     private StudioDto studio;
     private AuthorDto author;
     private double rating;
+    private List<String> recommends;
     private List<String> filesPath;
     private String content;
     private int likeCount;
@@ -33,6 +34,7 @@ public class ReviewResponseDto {
     public ReviewResponseDto(Review review, boolean isLiked) {
         this.id = review.getId();
         this.rating = review.getRating();
+        this.recommends = review.getRecommends();
         this.content = review.getContent();
         this.likeCount = review.getLikeCount();
         this.isLiked = isLiked;

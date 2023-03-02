@@ -32,7 +32,9 @@ public class Review extends DateEntity {
     @Column
     private double rating;
 
-    // TODO: recommends 필드 추가
+    @ElementCollection
+    @Column
+    private List<String> recommends = new ArrayList<>();
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewImage> images;
@@ -47,10 +49,11 @@ public class Review extends DateEntity {
     private List<Like> likes = new ArrayList<>();
 
     @Builder
-    public Review(Studio studio, Profile author, double rating, List<ReviewImage> images, String content, int likeCount) {
+    public Review(Studio studio, Profile author, double rating, List<String> recommends, List<ReviewImage> images, String content, int likeCount) {
         this.studio = studio;
         this.author = author;
         this.rating = rating;
+        this.recommends = recommends;
         this.images = images;
         this.content = content;
         this.likeCount = likeCount;

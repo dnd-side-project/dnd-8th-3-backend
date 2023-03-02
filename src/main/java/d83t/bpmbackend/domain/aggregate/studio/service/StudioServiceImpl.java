@@ -40,6 +40,8 @@ public class StudioServiceImpl implements StudioService {
                 .openHours(requestDto.getOpenHours())
                 .price(requestDto.getPrice())
                 .build();
+
+        studio.addRecommend(requestDto.getRecommends());
         studioRepository.save(studio);
 
         return new StudioResponseDto(studio);

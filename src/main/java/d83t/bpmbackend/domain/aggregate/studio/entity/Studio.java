@@ -4,9 +4,7 @@ import d83t.bpmbackend.base.entity.DateEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Entity
 @Getter
@@ -36,7 +34,11 @@ public class Studio extends DateEntity {
     @Column
     private String secondTag;
 
-    // TODO: recommends 추가
+    @ElementCollection
+    @CollectionTable(name = "studio_recommends", joinColumns = @JoinColumn(name = "studio_id"))
+    @MapKeyColumn(name = "recommend")
+    @Column(name = "count")
+    private Map<String, Integer> recommends = new HashMap<>();
 
     @Column
     private String phone;
@@ -85,6 +87,38 @@ public class Studio extends DateEntity {
         this.rating = rating;
         this.reviewCount = reviewCount;
         this.scrapCount = scrapCount;
+    }
+
+    public void addRecommend(List<String> recommends) {
+        for (String recommend : recommends) {
+            if (this.recommends.containsKey(recommend)) {
+                this.recommends.put(recommend, this.recommends.get(recommend) + 1);
+            } else {
+                this.recommends.put(recommend, 1);
+            }
+        }
+    }
+
+    public Map<String, Integer> getTopRecommends() {
+        Map<String, Integer> topRecommends = new LinkedHashMap<>();
+
+        List<Map.Entry<String, Integer>> sortedRecommends = new ArrayList<>(this.recommends.entrySet());
+        Collections.sort(sortedRecommends, new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+
+        int i = 0;
+        for (Map.Entry<String, Integer> recommend : sortedRecommends) {
+            topRecommends.put(recommend.getKey(), recommend.getValue());
+            i++;
+            if (i == 3) {
+                break;
+            }
+        }
+        return topRecommends;
     }
 
     public void addStudioImage(StudioImage studioImage) {

@@ -4,6 +4,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -14,17 +17,19 @@ public class StudioRequestDto {
     private String address;
     private double latitude;
     private double longitude;
+    private List<String> recommends;
     private String phone;
     private String sns;
     private String openHours;
     private String price;
 
     @Builder
-    public StudioRequestDto(String name, String address, double latitude, double longitude, String phone, String sns, String openHours, String price) {
+    public StudioRequestDto(String name, String address, double latitude, double longitude, List<String> recommends, String phone, String sns, String openHours, String price) {
         this.name = name;
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.recommends = recommends;
         this.phone = phone;
         this.sns = sns;
         this.openHours = openHours;

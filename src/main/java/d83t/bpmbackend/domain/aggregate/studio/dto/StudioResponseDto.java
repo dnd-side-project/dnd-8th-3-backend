@@ -10,6 +10,7 @@ import lombok.Getter;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Schema(description = "스튜디오 응답 DTO")
@@ -21,6 +22,7 @@ public class StudioResponseDto {
     private double longitude;
     private String firstTag;
     private String secondTag;
+    private Map<String, Integer> topRecommends;
     private String phone;
     private String sns;
     private String openHours;
@@ -42,6 +44,7 @@ public class StudioResponseDto {
         this.longitude = studio.getLongitude();
         this.firstTag = studio.getFirstTag();
         this.secondTag = studio.getSecondTag();
+        this.topRecommends = studio.getTopRecommends();
         this.phone = studio.getPhone();
         this.sns = studio.getSns();
         this.openHours = studio.getOpenHours();

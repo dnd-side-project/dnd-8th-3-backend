@@ -1,7 +1,5 @@
 package d83t.bpmbackend.domain.aggregate.user.repository;
 
-import d83t.bpmbackend.domain.aggregate.location.entity.Location;
-import d83t.bpmbackend.domain.aggregate.location.repository.LocationRepository;
 import d83t.bpmbackend.domain.aggregate.profile.entity.Profile;
 import d83t.bpmbackend.domain.aggregate.studio.entity.Studio;
 import d83t.bpmbackend.domain.aggregate.studio.repository.StudioRepository;
@@ -28,27 +26,17 @@ class ScheduleRepositoryTest {
     @Autowired
     StudioRepository studioRepository;
 
-    @Autowired
-    LocationRepository locationRepository;
 
     @Autowired
     UserRepository userRepository;
 
-    private Location location;
     private Studio studio;
     private User user;
 
     @BeforeEach
     void setup() {
-        location = Location.builder()
-                .address("경기도")
-                .latitude(1)
-                .longitude(2)
-                .build();
-        locationRepository.save(location);
 
         studio = Studio.builder()
-                .location(location)
                 .name("스튜디오")
                 .firstTag("123")
                 .secondTag("second")
@@ -103,6 +91,23 @@ class ScheduleRepositoryTest {
         Assertions.assertThat(savedSchedule.getTime()).isEqualTo("17:54:22");
         Assertions.assertThat(savedSchedule.getMemo()).isEqualTo("메모");
 
+    }
+
+    @Test
+    void 스케줄등록하기_스튜디오없을때(){
+        Studio studio = null;
+        Schedule schedule = Schedule.builder()
+                .user(user)
+                .studio(studio)
+                .memo("메모")
+                .date(convertDateFormat("2022-12-12"))
+                .time(convertTimeFormat("17:54:22"))
+                .build();
+        Schedule savedSchedule = scheduleRepository.save(schedule);
+
+        Assertions.assertThat(savedSchedule.getDate()).isEqualTo("2022-12-12");
+        Assertions.assertThat(savedSchedule.getTime()).isEqualTo("17:54:22");
+        Assertions.assertThat(savedSchedule.getMemo()).isEqualTo("메모");
     }
 
     private LocalDate convertDateFormat(String date) {

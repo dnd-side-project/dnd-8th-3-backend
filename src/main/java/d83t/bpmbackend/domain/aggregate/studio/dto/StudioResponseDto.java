@@ -1,5 +1,6 @@
 package d83t.bpmbackend.domain.aggregate.studio.dto;
 
+import d83t.bpmbackend.domain.aggregate.community.dto.BodyShapeResponse;
 import d83t.bpmbackend.domain.aggregate.studio.entity.Studio;
 import d83t.bpmbackend.domain.aggregate.studio.entity.StudioImage;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -58,5 +59,12 @@ public class StudioResponseDto {
         this.scrapCount = studio.getScrapCount();
         this.createdAt = studio.getCreatedDate();
         this.updatedAt = studio.getModifiedDate();
+    }
+
+    @Builder
+    @Getter
+    public static class MultiStudios{
+        List<StudioResponseDto> studios;
+        Integer studiosCount;
     }
 }

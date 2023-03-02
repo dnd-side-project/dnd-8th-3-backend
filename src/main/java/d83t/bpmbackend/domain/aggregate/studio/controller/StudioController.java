@@ -51,9 +51,23 @@ public class StudioController {
         return studioService.findById(studioId);
     }
 
-    @Operation(summary = "스튜디오 찾기 API")
+    // TODO: 쿼리 스트링으로 필터를 받아 조회
+    @Operation(summary = "스튜디오 조회 API", description = "스튜디오 정보를 전체 조회합니다")
+    @ApiResponse(responseCode = "200", description = "스튜디오 전체 조회 성공", content = @Content(schema = @Schema(implementation = StudioResponseDto.MultiStudios.class)))
+    @GetMapping("/search-all")
+    public StudioResponseDto.MultiStudios findStudioAll(
+            @AuthenticationPrincipal User user,
+            @RequestParam(value = "limit", required = false) Integer limit,
+            @RequestParam(value = "offset", required = false) Integer offset) {
+        log.info("전체 스튜디오 리스트 조회");
+        return StudioResponseDto.MultiStudios.builder().studios(studioService.findStudioAll(limit, offset)).build();
+    }
+
+    @Operation(summary = "스튜디오 이름 찾기 API")
+    @ApiResponse(responseCode = "200", description = "스튜디오 이름 조회 성공", content = @Content(schema = @Schema(implementation = StudioResponseDto.class)))
+    @ApiResponse(responseCode = "404", description = "스튜디오를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     @GetMapping()
-    public StudioResponseDto searchStudio(@RequestParam String q){
+    public StudioResponseDto searchStudio(@RequestParam String q) {
         log.info("query param:" + q);
         return studioService.searchStudio(q);
     }
@@ -64,19 +78,19 @@ public class StudioController {
             @PathVariable Long studioId,
             @AuthenticationPrincipal User user,
             @RequestPart List<MultipartFile> files,
-            @ModelAttribute ReviewRequestDto requestDto){
+            @ModelAttribute ReviewRequestDto requestDto) {
         log.info("studio id : " + studioId);
         return reviewService.createReview(studioId, user, files, requestDto);
     }
 
     @Operation(summary = "리뷰 리스트 조회 API", description = "sort 는 최신순(createdDate) / 좋아요순(likeCount) 와 같이 넘겨주시면 됩니다.")
     @GetMapping("/{studioId}/review")
-    public List<ReviewResponseDto> findAllReviews (
+    public List<ReviewResponseDto> findAllReviews(
             @PathVariable Long studioId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestParam(defaultValue = "createdDate") String sort,
-            @AuthenticationPrincipal User user){
+            @AuthenticationPrincipal User user) {
         log.info("page : " + page + " / size : " + size + " / sort : " + sort);
         return reviewService.findAll(user, studioId, page, size, sort);
     }
@@ -95,7 +109,7 @@ public class StudioController {
     public void deleteReview(
             @PathVariable Long studioId,
             @PathVariable Long reviewId,
-            @AuthenticationPrincipal User user){
+            @AuthenticationPrincipal User user) {
         log.info("review id : " + reviewId);
         reviewService.deleteReview(user, studioId, reviewId);
     }
@@ -104,7 +118,7 @@ public class StudioController {
     @PostMapping("/{studioId}/review/{reviewId}/like")
     public void createLike(
             @PathVariable Long reviewId,
-            @AuthenticationPrincipal User user){
+            @AuthenticationPrincipal User user) {
         log.info("review id : " + reviewId);
         likeService.createLike(user, reviewId);
     }
@@ -113,7 +127,7 @@ public class StudioController {
     @DeleteMapping("/{studioId}/review/{reviewId}/like")
     public void deleteLike(
             @PathVariable Long reviewId,
-            @AuthenticationPrincipal User user){
+            @AuthenticationPrincipal User user) {
         log.info("review id : " + reviewId);
         likeService.deleteLike(user, reviewId);
     }

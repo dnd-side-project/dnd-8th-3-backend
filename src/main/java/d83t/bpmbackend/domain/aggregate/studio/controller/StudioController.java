@@ -54,7 +54,7 @@ public class StudioController {
     // TODO: 쿼리 스트링으로 필터를 받아 조회
     @Operation(summary = "스튜디오 조회 API", description = "스튜디오 정보를 전체 조회합니다")
     @ApiResponse(responseCode = "200", description = "스튜디오 전체 조회 성공", content = @Content(schema = @Schema(implementation = StudioResponseDto.MultiStudios.class)))
-    @GetMapping("/search-all")
+    @GetMapping("/list")
     public StudioResponseDto.MultiStudios findStudioAll(
             @AuthenticationPrincipal User user,
             @RequestParam(value = "limit", required = false) Integer limit,

@@ -60,7 +60,8 @@ public class StudioController {
             @RequestParam(value = "limit", required = false) Integer limit,
             @RequestParam(value = "offset", required = false) Integer offset) {
         log.info("전체 스튜디오 리스트 조회");
-        return StudioResponseDto.MultiStudios.builder().studios(studioService.findStudioAll(limit, offset)).build();
+        List<StudioResponseDto> findStudios = studioService.findStudioAll(limit, offset);
+        return StudioResponseDto.MultiStudios.builder().studios(findStudios).studiosCount(findStudios.size()).build();
     }
 
     @Operation(summary = "스튜디오 이름 찾기 API")

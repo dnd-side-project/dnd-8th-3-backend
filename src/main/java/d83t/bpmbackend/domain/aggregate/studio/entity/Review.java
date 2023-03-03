@@ -33,6 +33,7 @@ public class Review extends DateEntity {
     private double rating;
 
     @ElementCollection
+    @CollectionTable(name = "review_recommends", joinColumns = @JoinColumn(name = "review_id"))
     @Column
     private List<String> recommends = new ArrayList<>();
 

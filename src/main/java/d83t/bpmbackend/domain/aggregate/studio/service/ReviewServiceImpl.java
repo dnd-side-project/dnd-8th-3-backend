@@ -44,20 +44,16 @@ public class ReviewServiceImpl implements ReviewService {
     private final LikeRepository likeRepository;
     private final S3UploaderService uploaderService;
 
-    @Value("reviews/")
+    @Value("${bpm.s3.bucket.review.path}")
     private String reviewPath;
-    @Value("local")
+    @Value("${spring.environment}")
     private String env;
 
     private String fileDir;
 
     @PostConstruct
     private void init() {
-        if (env.equals("local")) {
-            this.fileDir = FileUtils.getUploadPath();
-        } else if (env.equals("prod")) {
-            this.fileDir = this.reviewPath;
-        }
+        this.fileDir = env.equals("local") ? FileUtils.getUploadPath() : this.reviewPath;
     }
 
     @Override
@@ -84,23 +80,22 @@ public class ReviewServiceImpl implements ReviewService {
         for (MultipartFile file : files) {
             String newName = FileUtils.createNewFileName(file.getOriginalFilename());
             String filePath = fileDir + newName;
+            System.out.println(filePath);
+
+            String imagePath = env.equals("prod") ? uploaderService.putS3(file, reviewPath, newName) : filePath;
             review.addReviewImage(ReviewImage.builder()
                     .originFileName(newName)
-                    .storagePathName(filePath)
+                    .storagePathName(imagePath)
                     .review(review)
                     .build());
             filePaths.add(filePath);
-
-            if (env.equals("prod")) {
-                uploaderService.putS3(file, reviewPath, newName);
-            } else if (env.equals("local")) {
-                try {
-                    File localFile = new File(filePath);
-                    file.transferTo(localFile);
-                    FileUtils.removeNewFile(localFile);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            //로컬인 경우
+            try {
+                File localFile = new File(filePath);
+                file.transferTo(localFile);
+                FileUtils.removeNewFile(localFile);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 

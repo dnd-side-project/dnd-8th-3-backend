@@ -101,6 +101,7 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         review = studio.addReview(review);
+        reviewRepository.save(review);
         studio.addRecommend(requestDto.getRecommends());
         studioRepository.save(studio);
 

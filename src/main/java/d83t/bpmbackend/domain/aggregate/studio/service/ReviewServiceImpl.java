@@ -74,6 +74,7 @@ public class ReviewServiceImpl implements ReviewService {
                 .studio(studio)
                 .author(profile)
                 .rating(requestDto.getRating())
+                .recommends(requestDto.getRecommends())
                 .content(requestDto.getContent())
                 .build();
 

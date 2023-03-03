@@ -68,9 +68,10 @@ public class StudioController {
     @ApiResponse(responseCode = "200", description = "스튜디오 이름 조회 성공", content = @Content(schema = @Schema(implementation = StudioResponseDto.class)))
     @ApiResponse(responseCode = "404", description = "스튜디오를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     @GetMapping()
-    public StudioResponseDto searchStudio(@RequestParam String q) {
+    public StudioResponseDto.MultiStudios searchStudio(@RequestParam String q) {
         log.info("query param:" + q);
-        return studioService.searchStudio(q);
+        List<StudioResponseDto> findStudios = studioService.searchStudio(q);
+        return StudioResponseDto.MultiStudios.builder().studios(findStudios).studiosCount(findStudios.size()).build();
     }
 
     @Operation(summary = "리뷰 등록 API")

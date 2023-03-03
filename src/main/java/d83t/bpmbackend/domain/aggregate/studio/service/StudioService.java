@@ -6,7 +6,7 @@ import d83t.bpmbackend.domain.aggregate.studio.dto.StudioResponseDto;
 import java.util.List;
 
 public interface StudioService {
-    StudioResponseDto searchStudio(String q);
+    List<StudioResponseDto> searchStudio(String q);
     StudioResponseDto createStudio(StudioRequestDto requestDto);
     StudioResponseDto findById(Long studioId);
 

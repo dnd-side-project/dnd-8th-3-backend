@@ -40,6 +40,7 @@ public class LikeServiceImpl implements LikeService {
 
         review.addLike(like, profile);
         reviewRepository.save(review);
+        likeRepository.save(like);
     }
 
     // TODO: 작성자인지 판단하는 검증 로직 추가

@@ -17,7 +17,7 @@ public enum Error {
     FILE_SIZE_MAX("a Maximum of 5 files can Come in", HttpStatus.BAD_REQUEST),
     NOT_FOUND_LOCATION("location not found", HttpStatus.NOT_FOUND),
     NOT_FOUND_STUDIO("studio not found", HttpStatus.NOT_FOUND),
-    NOT_FOUND_SCHEDULE("schedule not found",HttpStatus.NOT_FOUND),
+    NOT_FOUND_SCHEDULE("schedule not found",HttpStatus.NO_CONTENT),
     STUDIO_ALREADY_EXISTS("studio already exists", HttpStatus.CONFLICT),
     NOT_FOUND_REVIEW("review not found", HttpStatus.NOT_FOUND),
     NOT_FOUND_LIKE("like not found", HttpStatus.NOT_FOUND);

@@ -46,13 +46,15 @@ public class ProfileImageServiceImpl implements ProfileImageService {
         String filePath = fileDir + newName;
         String imagePath = env.equals("prod") ? uploaderService.putS3(file, profilePath, newName) : filePath;
 
-        try {
-            File localFile = new File(filePath);
-            file.transferTo(localFile);
-            FileUtils.removeNewFile(localFile);
-        } catch (IOException e) {
-            log.error("Failed to transfer file: {}", e.getMessage());
-            throw new CustomException(Error.FILE_TRANSFER_FAIL);
+        if(env.equals("local")) {
+            try {
+                File localFile = new File(filePath);
+                file.transferTo(localFile);
+                FileUtils.removeNewFile(localFile);
+            } catch (IOException e) {
+                log.error("Failed to transfer file: {}", e.getMessage());
+                throw new CustomException(Error.FILE_TRANSFER_FAIL);
+            }
         }
 
         return ProfileDto.builder()

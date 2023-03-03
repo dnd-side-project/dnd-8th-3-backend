@@ -128,7 +128,7 @@ public class Studio extends DateEntity {
         this.images.add(studioImage);
     }
 
-    public void addReview(Review review) {
+    public Review addReview(Review review) {
         this.reviews.add(review);
         if (review.getRating() != 0.0) {
             double avg = ((this.rating * reviewCount) + review.getRating()) / (reviewCount + 1);
@@ -136,6 +136,7 @@ public class Studio extends DateEntity {
         }
         this.reviewCount += 1;
         review.setStudio(this);
+        return review;
     }
 
     public void removeReview(Review review) {

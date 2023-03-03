@@ -2,7 +2,8 @@ package d83t.bpmbackend.domain.aggregate.profile.service;
 
 import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileDto;
 import d83t.bpmbackend.domain.aggregate.profile.dto.ProfileRequest;
-import d83t.bpmbackend.domain.aggregate.profile.entity.Profile;
+import d83t.bpmbackend.exception.CustomException;
+import d83t.bpmbackend.exception.Error;
 import d83t.bpmbackend.s3.S3UploaderService;
 import d83t.bpmbackend.utils.FileUtils;
 import jakarta.annotation.PostConstruct;
@@ -32,47 +33,33 @@ public class ProfileImageServiceImpl implements ProfileImageService {
 
     @PostConstruct
     private void init() {
-        if (env.equals("local")) {
-            this.fileDir = FileUtils.getUploadPath();
-        } else if (env.equals("prod")) {
-            this.fileDir = this.profilePath;
-        }
+        this.fileDir = env.equals("local") ? FileUtils.getUploadPath() : this.profilePath;
     }
 
     @Override
-    public ProfileDto setUploadFile(ProfileRequest profileRequest, MultipartFile file) {
-        ProfileDto profileDto = ProfileDto.builder()
-                .nickname(profileRequest.getNickname())
-                .bio(profileRequest.getBio())
-                .build();
+    public ProfileDto createProfileDto(ProfileRequest profileRequest, MultipartFile file) {
+        return setUploadFile(profileRequest, file);
+    }
+
+    private ProfileDto setUploadFile(ProfileRequest profileRequest, MultipartFile file) {
         String newName = FileUtils.createNewFileName(file.getOriginalFilename());
         String filePath = fileDir + newName;
-        profileDto.setImageName(newName);
-        if (env.equals("prod")) {
-            String path = uploaderService.putS3(file, profilePath, newName);
-            profileDto.setImagePath(path);
-        } else if (env.equals("local")) {
-            try {
-                File localFile = new File(filePath);
-                file.transferTo(localFile);
-                profileDto.setImagePath(filePath);
-                FileUtils.removeNewFile(localFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return profileDto;
-    }
+        String imagePath = env.equals("prod") ? uploaderService.putS3(file, profilePath, newName) : filePath;
 
-    @Override
-    public Profile convertProfileDto(ProfileDto profileDto) {
-        return Profile.builder()
-                .bio(profileDto.getBio())
-                .nickName(profileDto.getNickname())
-                .originFileName(profileDto.getImageName())
-                .storagePathName(profileDto.getImagePath())
+        try {
+            File localFile = new File(filePath);
+            file.transferTo(localFile);
+            FileUtils.removeNewFile(localFile);
+        } catch (IOException e) {
+            log.error("Failed to transfer file: {}", e.getMessage());
+            throw new CustomException(Error.FILE_TRANSFER_FAIL);
+        }
+
+        return ProfileDto.builder()
+                .nickname(profileRequest.getNickname())
+                .bio(profileRequest.getBio())
+                .imageName(newName)
+                .imagePath(imagePath)
                 .build();
     }
-
-
 }

@@ -58,7 +58,7 @@ public class Studio extends DateEntity {
     @Column
     private String content;
 
-    @Column(columnDefinition = "double default 0.0")
+    @Column(columnDefinition = "double precision default 0.0")
     private double rating;
 
     @Column(columnDefinition = "int default 0")

@@ -1,5 +1,6 @@
 package d83t.bpmbackend.domain.aggregate.profile.dto;
 
+import d83t.bpmbackend.domain.aggregate.profile.entity.Profile;
 import lombok.*;
 
 
@@ -15,4 +16,12 @@ public class ProfileDto {
     private String imageName;
     private String imagePath;
 
+    public Profile toEntity(){
+        return Profile.builder()
+                .bio(this.getBio())
+                .nickName(this.getNickname())
+                .originFileName(this.getImageName())
+                .storagePathName(this.getImagePath())
+                .build();
+    }
 }

@@ -43,16 +43,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public ProfileResponse signUp(ProfileRequest profileRequest, MultipartFile file) {
         Optional<User> findUser = userRepository.findByKakaoId(profileRequest.getKakaoId());
-        if(findUser.isPresent()){
+        if (findUser.isPresent()) {
             throw new CustomException(Error.USER_ALREADY_EXITS);
         }
         //닉네임 중복여부
         if (profileRepository.findByNickName(profileRequest.getNickname()).isPresent()) {
             throw new CustomException(Error.USER_NICKNAME_ALREADY_EXITS);
         }
-        ProfileDto profileDto = profileImageService.setUploadFile(profileRequest, file);
+        ProfileDto profileDto = profileImageService.createProfileDto(profileRequest, file);
 
-        Profile profile = profileImageService.convertProfileDto(profileDto);
+        Profile profile = profileDto.toEntity();
         User user = User.builder()
                 .kakaoId(profileRequest.getKakaoId())
                 .profile(profile)
@@ -68,27 +68,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ProfileResponse verification(UserRequestDto userRequestDto) {
-        Optional<User> user = Optional.ofNullable(userRepository.findByKakaoId(userRequestDto.getKakaoId()).orElseThrow(
-                () -> new CustomException(Error.NOT_FOUND_USER_ID))
-        );
-        Profile userProfile = user.get().getProfile();
+        User user = userRepository.findByKakaoId(userRequestDto.getKakaoId())
+                .orElseThrow(() -> new CustomException(Error.NOT_FOUND_USER_ID));
+
+        Profile profile = user.getProfile();
+
         return ProfileResponse.builder()
-                .nickname(userProfile.getNickName())
-                .bio(userProfile.getBio())
-                .token(jwtService.createToken(userProfile.getNickName()))
-                .image(userProfile.getStoragePathName())
+                .nickname(profile.getNickName())
+                .bio(profile.getBio())
+                .token(jwtService.createToken(profile.getNickName()))
+                .image(profile.getStoragePathName())
                 .build();
     }
 
 
+    // TODO: 요건 확실히, 스튜디오 없어도 등록되는데, 조회시에는 그 정보를 보여줘야하나?라는 요건
     @Override
     public ScheduleResponse registerSchedule(User user, ScheduleRequest scheduleRequest) {
-        Optional<Studio> findStudio = studioRepository.findByName(scheduleRequest.getStudioName());
-        Studio studio = null;
-        if (findStudio.isPresent()) {
-            studio = findStudio.get();
-        }
-
+        Studio studio = studioRepository.findByName(scheduleRequest.getStudioName())
+                .orElse(null);
+        //이미 유저가 일정을 등록했을 경우
+        scheduleRepository.findByUserId(user.getId()).ifPresent(
+                s -> {
+                    throw new CustomException(Error.USER_ALREADY_REGISTER_SCHEDULE);
+                }
+        );
         Schedule schedule = Schedule.builder()
                 .studio(studio)
                 .user(user)
@@ -109,19 +113,16 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public ScheduleResponse getSchedule(User user) {
-        Optional<Schedule> findSchedule = scheduleRepository.findByUserId(user.getId());
-        if(findSchedule.isEmpty()){
-            throw new CustomException(Error.NOT_FOUND_SCHEDULE);
-        }
-        Schedule schedule = findSchedule.get();
+        Schedule schedule = scheduleRepository.findByUserId(user.getId()).orElseThrow(
+                () -> new CustomException(Error.NOT_FOUND_SCHEDULE));
+        String studioName = schedule.getStudio() == null ? "" : schedule.getStudio().getName();
         return ScheduleResponse.builder()
                 .date(schedule.getDate())
                 .time(schedule.getTime())
-                .studioName(schedule.getStudio().getName())
+                .studioName(studioName)
                 .memo(schedule.getMemo())
                 .build();
     }
-
 
     private LocalDate convertDateFormat(String date) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

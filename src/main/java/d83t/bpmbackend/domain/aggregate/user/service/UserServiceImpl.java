@@ -96,6 +96,7 @@ public class UserServiceImpl implements UserService {
         Schedule schedule = Schedule.builder()
                 .studio(studio)
                 .user(user)
+                .studioName(studio.getName())
                 .date(convertDateFormat(scheduleRequest.getDate()))
                 .time(convertTimeFormat(scheduleRequest.getTime()))
                 .memo(scheduleRequest.getMemo())

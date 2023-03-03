@@ -38,4 +38,7 @@ public class Schedule {
     @ManyToOne(fetch = FetchType.LAZY)
     private Studio studio;
 
+    @Column
+    private String studioName;
+
 }

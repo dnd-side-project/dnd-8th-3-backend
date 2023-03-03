@@ -9,6 +9,5 @@ import java.util.Optional;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
-    @Query("SELECT a FROM Schedule a WHERE a.user.id= :userId")
-    Optional<Schedule> findByUserId(@Param("userId") Long userId);
+    Optional<Schedule> findByUserId(long userId);
 }

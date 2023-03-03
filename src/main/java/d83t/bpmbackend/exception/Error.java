@@ -5,8 +5,10 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public enum Error {
+    FILE_TRANSFER_FAIL("ailed to transfer file", HttpStatus.INTERNAL_SERVER_ERROR),
     NOT_FOUND_USER_ID("kakao user not found", HttpStatus.NOT_FOUND),
     USER_ALREADY_EXITS("user already exits", HttpStatus.CONFLICT),
+    USER_ALREADY_REGISTER_SCHEDULE("user already register schedule", HttpStatus.BAD_REQUEST),
     USER_NICKNAME_ALREADY_EXITS("user nickname already exits", HttpStatus.CONFLICT),
     S3_UPLOAD_FAIL("upload fail", HttpStatus.INTERNAL_SERVER_ERROR),
     S3_GET_FILE_FAIL("fail to get file", HttpStatus.INTERNAL_SERVER_ERROR),
